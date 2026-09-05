@@ -1,0 +1,9 @@
+go 1.26.5
+
+use (
+	./gateway
+	./services/order-service
+	./services/payment-service
+	./services/stock-service
+	./services/user-service
+)
