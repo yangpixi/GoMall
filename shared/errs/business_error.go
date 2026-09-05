@@ -17,4 +17,7 @@ func New(code int, msg string) *BusinessError {
 }
 
 // common errors
-var ()
+var (
+	ErrBadRequest   = New(400, "invalid request")
+	ErrUnauthorized = New(401, "authentication required")
+)
