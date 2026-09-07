@@ -2,9 +2,10 @@ go 1.26.5
 
 use (
 	./gateway
-	./shared
+	./services/auth-service
 	./services/order-service
 	./services/payment-service
 	./services/stock-service
 	./services/user-service
+	./shared
 )

@@ -13,6 +13,7 @@ type Response[T any] struct {
 	Data T      `json:"data,omitempty"`
 }
 
+// OK success response
 func OK[T any](c *gin.Context, data any) {
 	c.JSON(http.StatusOK, Response[T]{
 		Code: 0,
@@ -20,8 +21,9 @@ func OK[T any](c *gin.Context, data any) {
 	})
 }
 
-func Fail(c *gin.Context, err *errs.BusinessError) {
-	c.JSON(http.StatusOK, Response[struct{}]{
+// Fail failed response
+func Fail(c *gin.Context, err *errs.BusinessError, status int) {
+	c.JSON(status, Response[struct{}]{
 		Code: err.Code,
 		Msg:  err.Msg,
 	})
