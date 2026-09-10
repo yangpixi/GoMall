@@ -14,7 +14,7 @@ type Response[T any] struct {
 }
 
 // OK success response
-func OK[T any](c *gin.Context, data any) {
+func OK[T any](c *gin.Context, data T) {
 	c.JSON(http.StatusOK, Response[T]{
 		Code: 0,
 		Data: data,

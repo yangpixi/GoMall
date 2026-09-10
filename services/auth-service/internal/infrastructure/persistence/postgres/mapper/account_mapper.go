@@ -1,0 +1,23 @@
+package mapper
+
+import (
+	"errors"
+
+	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
+	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/model"
+)
+
+func ToAccount(p *model.User, roleIDs []uint) (*account.Account, error) {
+	if p.Username == "" || p.Password == "" {
+		return nil, errors.New("invalid user object")
+	}
+
+	acc, err := account.RestoreAccount(&account.State{
+		ID:       p.ID,
+		Username: p.Username,
+		Password: p.Password,
+		Status:   p.Status,
+		RoleIDs:  roleIDs,
+	})
+	return acc, err
+}
