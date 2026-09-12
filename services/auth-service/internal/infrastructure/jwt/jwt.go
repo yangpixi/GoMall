@@ -79,7 +79,7 @@ func (J *JWT) ParseAndValidate(token string) (username, kind string, roleIDs []u
 		jwt.WithLeeway(5*time.Second),
 	)
 
-	if err != nil {
+	if err != nil || !res.Valid {
 		return "", "", nil, err
 	}
 
