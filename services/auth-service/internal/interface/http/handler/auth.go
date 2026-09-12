@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/auth-service/internal/application/command"
@@ -13,6 +12,7 @@ import (
 type AuthHandler struct {
 	login    *command.LoginHandler
 	register *command.RegisterHandler
+	refresh  *command.RefreshHandler
 }
 
 type loginRequest struct {
@@ -25,12 +25,16 @@ type registerRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-func NewAuthHandler(login *command.LoginHandler, register *command.RegisterHandler) (*AuthHandler, error) {
-	if login == nil || register == nil {
+type refreshRequest struct {
+	RefreshToken string `json:"refreshToken" binding:"required"`
+}
+
+func NewAuthHandler(login *command.LoginHandler, register *command.RegisterHandler, refresh *command.RefreshHandler) (*AuthHandler, error) {
+	if login == nil || register == nil || refresh == nil {
 		return nil, errors.New("missing required arguments")
 	}
 
-	return &AuthHandler{login: login, register: register}, nil
+	return &AuthHandler{login: login, register: register, refresh: refresh}, nil
 }
 
 func (a *AuthHandler) LoginHandler(c *gin.Context) {
@@ -38,7 +42,7 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
@@ -50,7 +54,7 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 	})
 	if err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
@@ -62,10 +66,10 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 
 func (a *AuthHandler) RegisterHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
-	var req loginRequest
+	var req registerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
@@ -78,11 +82,35 @@ func (a *AuthHandler) RegisterHandler(c *gin.Context) {
 
 	if err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
 	}
 
 	response.OK[string](c, "register successfully")
+}
+
+func (a *AuthHandler) RefreshHandler(c *gin.Context) {
+	var bizErr *errs.BusinessError
+	var req refreshRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if errors.As(err, &bizErr) {
+			_ = c.Error(bizErr)
+			c.Abort()
+			return
+		}
+	}
+
+	res, err := a.refresh.Handle(c.Request.Context(), &command.RefreshCommand{RefreshToken: req.RefreshToken})
+
+	if err != nil {
+		if errors.As(err, &bizErr) {
+			_ = c.Error(bizErr)
+			c.Abort()
+			return
+		}
+	}
+
+	response.OK[*command.RefreshResult](c, res)
 }

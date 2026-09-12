@@ -52,7 +52,12 @@ func main() {
 		panic("failed to init register handler")
 	}
 
-	authHandler, err := handler.NewAuthHandler(loginHandler, registerHandler)
+	refreshHandler, err := command.NewRefreshHandler(issuer)
+	if err != nil {
+		panic("failed to init refresh handler")
+	}
+
+	authHandler, err := handler.NewAuthHandler(loginHandler, registerHandler, refreshHandler)
 	if err != nil {
 		panic("failed to init authHandler")
 	}
