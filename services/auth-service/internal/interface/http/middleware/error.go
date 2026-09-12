@@ -16,7 +16,7 @@ func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		// don't handle when there is no error
+		// ignore when there is no error
 		if len(c.Errors) == 0 || c.Writer.Written() {
 			return
 		}
