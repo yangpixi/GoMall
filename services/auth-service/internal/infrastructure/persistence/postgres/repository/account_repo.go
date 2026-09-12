@@ -37,7 +37,7 @@ func (a *AccountRepo) FindByID(ctx context.Context, id uint) (*account.Account, 
 func (a *AccountRepo) FindByUsername(ctx context.Context, username string) (*account.Account, error) {
 	po, err := gorm.G[model.User](a.db).Where("username = ?", username).First(ctx)
 	if err != nil {
-		return nil, account.ErrNotFound
+		return nil, account.ErrAccountNotFound
 	}
 
 	var ids []uint
@@ -48,7 +48,7 @@ func (a *AccountRepo) FindByUsername(ctx context.Context, username string) (*acc
 	}
 
 	if len(ids) == 0 {
-		return nil, account.ErrNotFound
+		return nil, account.ErrAccountNotFound
 	}
 
 	acc, err := mapper.ToAccount(&po, ids)
