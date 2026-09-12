@@ -35,7 +35,7 @@ func (h *LoginHandler) Handle(ctx context.Context, cmd *LoginCommand) (*LoginRes
 		return nil, err
 	}
 
-	t, err := h.issuer.Token(user.Username(), user.RoleIDs())
+	t, expire, err := h.issuer.Token(user.Username(), user.RoleIDs())
 	if err != nil {
 		return nil, err
 	}
@@ -48,6 +48,9 @@ func (h *LoginHandler) Handle(ctx context.Context, cmd *LoginCommand) (*LoginRes
 	res := &LoginResult{
 		Token:        t,
 		RefreshToken: rt,
+		Username:     user.Username(),
+		ExpiresIn:    expire,
+		TokenType:    "Bearer",
 	}
 
 	return res, nil

@@ -1,9 +1,7 @@
 package permission
 
-import "gorm.io/gorm"
-
 type Permission struct {
-	gorm.Model
+	ID       uint
 	code     string
 	resource string
 	action   string

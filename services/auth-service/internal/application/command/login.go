@@ -10,4 +10,7 @@ type LoginCommand struct {
 type LoginResult struct {
 	Token        string `json:"token"`
 	RefreshToken string `json:"refreshToken"`
+	ExpiresIn    int    `json:"expiresIn"`
+	TokenType    string `json:"tokenType"`
+	Username     string `json:"username"`
 }

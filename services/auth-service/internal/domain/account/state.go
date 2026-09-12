@@ -12,7 +12,7 @@ type State struct {
 	RoleIDs  []uint
 }
 
-func RestoreAccount(s *State) (*Account, error) {
+func Restore(s *State) (*Account, error) {
 
 	if s.Username == "" || s.Password == "" {
 		return nil, errors.New("invalid account state")

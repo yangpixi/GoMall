@@ -6,6 +6,7 @@ import (
 
 	"github.com/yangpixi/GoMall/auth-service/internal/application/command"
 	"github.com/yangpixi/GoMall/auth-service/internal/config"
+	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/jwt"
 	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres"
 	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/repository"
@@ -26,6 +27,7 @@ func main() {
 	}
 
 	accountRepo := repository.NewAccountRepo(db)
+	roleRepo := repository.NewRoleRepo(db)
 	issuer, err := jwt.NewJWT(
 		c.JWT.SecretKey,
 		time.Duration(c.JWT.Expiration)*time.Second,
@@ -40,7 +42,17 @@ func main() {
 		panic("failed to init login handler")
 	}
 
-	authHandler, err := handler.NewAuthHandler(loginHandler)
+	generator, err := id.NewGenerator(1)
+	if err != nil {
+		panic("failed to init snowflake generator")
+	}
+
+	registerHandler, err := command.NewRegisterHandler(accountRepo, roleRepo, generator)
+	if err != nil {
+		panic("failed to init register handler")
+	}
+
+	authHandler, err := handler.NewAuthHandler(loginHandler, registerHandler)
 	if err != nil {
 		panic("failed to init authHandler")
 	}

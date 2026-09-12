@@ -12,7 +12,7 @@ func ToAccount(p *model.User, roleIDs []uint) (*account.Account, error) {
 		return nil, errors.New("invalid user object")
 	}
 
-	acc, err := account.RestoreAccount(&account.State{
+	acc, err := account.Restore(&account.State{
 		ID:       p.ID,
 		Username: p.Username,
 		Password: p.Password,
@@ -20,4 +20,17 @@ func ToAccount(p *model.User, roleIDs []uint) (*account.Account, error) {
 		RoleIDs:  roleIDs,
 	})
 	return acc, err
+}
+func ToAccountPO(account *account.Account) (*model.User, error) {
+	s, err := account.Snapshot()
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		ID:       s.ID,
+		Username: s.Username,
+		Password: s.Password,
+		Status:   s.Status,
+	}, nil
 }

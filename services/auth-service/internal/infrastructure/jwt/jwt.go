@@ -38,9 +38,9 @@ func (J *JWT) RefreshExpire() time.Duration {
 	return J.refreshExpiration
 }
 
-func (J *JWT) Token(username string, roleIDs []uint) (string, error) {
+func (J *JWT) Token(username string, roleIDs []uint) (string, int, error) {
 	token, err := J.generateToken(username, roleIDs, J.expiration)
-	return token, err
+	return token, int(J.expiration.Seconds()), err
 }
 
 func (J *JWT) RefreshToken(username string, roleIDs []uint) (string, error) {

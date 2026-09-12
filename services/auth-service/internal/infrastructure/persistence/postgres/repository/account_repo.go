@@ -54,3 +54,17 @@ func (a *AccountRepo) FindByUsername(ctx context.Context, username string) (*acc
 	acc, err := mapper.ToAccount(&po, ids)
 	return acc, err
 }
+
+func (a *AccountRepo) Save(ctx context.Context, account *account.Account) error {
+	po, err := mapper.ToAccountPO(account)
+	if err != nil {
+		return err
+	}
+
+	err = gorm.G[model.User](a.db).Create(ctx, po)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
