@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+database:
+  connection:
+    host: xxxxx
+    port: 5432
+  user: postgres
+  password: root
+  db: auth_db
+
+jwt:
+  secret-key: adminadminadminadmin
+  expiration: 600
+  refresh-expiration: 3600
