@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/auth-service/internal/application/command"
@@ -38,7 +37,7 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
@@ -50,7 +49,7 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 	})
 	if err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
@@ -65,7 +64,7 @@ func (a *AuthHandler) RegisterHandler(c *gin.Context) {
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
@@ -78,7 +77,7 @@ func (a *AuthHandler) RegisterHandler(c *gin.Context) {
 
 	if err != nil {
 		if errors.As(err, &bizErr) {
-			response.Fail(c, bizErr, http.StatusOK)
+			_ = c.Error(bizErr)
 			c.Abort()
 			return
 		}
