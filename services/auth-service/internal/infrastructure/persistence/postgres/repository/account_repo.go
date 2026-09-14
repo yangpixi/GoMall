@@ -30,8 +30,7 @@ func (a *AccountRepo) FindByID(ctx context.Context, id uint) (*account.Account, 
 		return nil, err
 	}
 
-	acc, err := mapper.ToAccount(&po, ids)
-	return acc, err
+	return mapper.ToAccount(&po, ids)
 }
 
 func (a *AccountRepo) FindByUsername(ctx context.Context, username string) (*account.Account, error) {
@@ -51,8 +50,7 @@ func (a *AccountRepo) FindByUsername(ctx context.Context, username string) (*acc
 		return nil, account.ErrAccountNotFound
 	}
 
-	acc, err := mapper.ToAccount(&po, ids)
-	return acc, err
+	return mapper.ToAccount(&po, ids)
 }
 
 func (a *AccountRepo) Save(ctx context.Context, account *account.Account) error {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"time"
 
 	"github.com/yangpixi/GoMall/auth-service/internal/application/command"
@@ -12,18 +13,22 @@ import (
 	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/repository"
 	"github.com/yangpixi/GoMall/auth-service/internal/interface/http"
 	"github.com/yangpixi/GoMall/auth-service/internal/interface/http/handler"
+	"github.com/yangpixi/GoMall/shared/logger"
 )
 
 func main() {
-	c, err := config.Load("./config/config.yaml")
+	l := logger.New("auth", slog.LevelInfo)
+	slog.SetDefault(l)
+
+	c, err := config.Load("./config/config.example.yaml")
 
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("failed to load config: %w", err))
 	}
 
 	db, err := postgres.NewDB(c)
 	if err != nil {
-		panic("failed to connect to database")
+		panic(fmt.Errorf("failed to connect to database: %w", err))
 	}
 
 	accountRepo := repository.NewAccountRepo(db)
@@ -34,37 +39,39 @@ func main() {
 		time.Duration(c.JWT.RefreshExpiration)*time.Second,
 	)
 	if err != nil {
-		panic("failed to init jwt issuer")
+		panic(fmt.Errorf("failed to init jwt issuer: %w", err))
 	}
 
 	loginHandler, err := command.NewLoginHandler(accountRepo, issuer)
 	if err != nil {
-		panic("failed to init login handler")
+		panic(fmt.Errorf("failed to init login handler: %w", err))
 	}
 
 	generator, err := id.NewGenerator(1)
 	if err != nil {
-		panic("failed to init snowflake generator")
+		panic(fmt.Errorf("failed to init snowflake generator: %w", err))
 	}
 
 	registerHandler, err := command.NewRegisterHandler(accountRepo, roleRepo, generator)
 	if err != nil {
-		panic("failed to init register handler")
+		panic(fmt.Errorf("failed to init register handler: %w", err))
 	}
 
 	refreshHandler, err := command.NewRefreshHandler(issuer)
 	if err != nil {
-		panic("failed to init refresh handler")
+		panic(fmt.Errorf("failed to init refresh handler: %w", err))
 	}
 
 	authHandler, err := handler.NewAuthHandler(loginHandler, registerHandler, refreshHandler)
 	if err != nil {
-		panic("failed to init authHandler")
+		panic(fmt.Errorf("failed to init authHandler: %w", err))
 	}
 
 	r := http.NewRouter(authHandler)
 
 	if err = r.Run(fmt.Sprintf(":%d", c.Server.Port)); err != nil {
-		panic("failed to run http server on specific port")
+		panic(fmt.Errorf("failed to run http server on specific port: %w", err))
 	}
+
+	slog.Info("service starts successfully", "port", c.Server.Port)
 }

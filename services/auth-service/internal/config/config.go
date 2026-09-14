@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -42,11 +43,15 @@ func Load(path string) (*Config, error) {
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
-	config := &Config{}
+	c := &Config{}
 
-	if err := yaml.Unmarshal(b, config); err != nil {
+	if err := yaml.Unmarshal(b, c); err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
-	return config, nil
+	if c.JWT.SecretKey == "" {
+		return nil, errors.New("missing secretKey")
+	}
+
+	return c, nil
 }
