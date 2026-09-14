@@ -1,0 +1,5 @@
+server:
+  port: 8080
+
+jwt:
+  secret-key: your_secret_key

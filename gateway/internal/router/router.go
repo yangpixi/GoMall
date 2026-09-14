@@ -3,13 +3,13 @@ package router
 import (
 	"net/http"
 
-	"github.com/yangpixi/GoMall/gateway/proxy"
-	"github.com/yangpixi/GoMall/gateway/router/middleware"
+	"github.com/yangpixi/GoMall/gateway/internal/proxy"
+	"github.com/yangpixi/GoMall/gateway/internal/router/middleware"
 )
 
-func New() *http.ServeMux {
+func New(secretKey []byte) *http.ServeMux {
 	mux := http.NewServeMux()
-	requiredJWT := middleware.RequiredJWT([]byte("123132"))
+	requiredJWT := middleware.RequiredJWT(secretKey)
 
 	mux.Handle("/api/v1/auth/", proxy.New("http://localhost:8081"))
 	mux.Handle("/api/v1/user/", requiredJWT(proxy.New("http://localhost:8082")))
