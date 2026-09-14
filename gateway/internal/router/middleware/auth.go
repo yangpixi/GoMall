@@ -15,6 +15,7 @@ type claims struct {
 	jwt.RegisteredClaims
 }
 
+// RequiredJWT an http middleware that checks user's Bearer token
 func RequiredJWT(secretKey []byte) func(handler http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {

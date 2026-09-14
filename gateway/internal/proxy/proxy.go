@@ -7,6 +7,7 @@ import (
 	"net/url"
 )
 
+// New return a reverse proxy instance
 func New(path string) http.Handler {
 	u, err := url.Parse(path)
 	if err != nil {

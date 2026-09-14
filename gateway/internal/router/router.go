@@ -7,6 +7,7 @@ import (
 	"github.com/yangpixi/GoMall/gateway/internal/router/middleware"
 )
 
+// New return an http router that defines all proxy rules.
 func New(secretKey []byte) *http.ServeMux {
 	mux := http.NewServeMux()
 	requiredJWT := middleware.RequiredJWT(secretKey)
