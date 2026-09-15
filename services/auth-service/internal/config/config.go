@@ -9,7 +9,7 @@ import (
 
 type Config struct {
 	Server   Server   `yaml:"server"`
-	DataBase DataBase `yaml:"database"`
+	DataBase Database `yaml:"database"`
 	JWT      JWT      `yaml:"jwt"`
 }
 
@@ -17,7 +17,7 @@ type Server struct {
 	Port int `yaml:"port"`
 }
 
-type DataBase struct {
+type Database struct {
 	Connection Connection `yaml:"connection"`
 	User       string     `yaml:"user"`
 	Password   string     `yaml:"password"`
