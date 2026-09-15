@@ -11,11 +11,11 @@ import (
 
 func NewDB(c *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable TimeZone=Asia/Shanghai",
-		c.DataBase.Connection.Host,
-		c.DataBase.Connection.Port,
-		c.DataBase.User,
-		c.DataBase.Password,
-		c.DataBase.DB,
+		c.Database.Connection.Host,
+		c.Database.Connection.Port,
+		c.Database.User,
+		c.Database.Password,
+		c.Database.DB,
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
