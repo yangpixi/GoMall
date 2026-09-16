@@ -9,11 +9,7 @@ import (
 
 func ToAccount(p *model.User, roleIDs []uint) (*account.Account, error) {
 	if p == nil {
-		return nil, errors.New("user object is nil")
-	}
-
-	if p.Username == "" || p.Password == "" {
-		return nil, errors.New("invalid user object")
+		return nil, errors.New("invalid account model")
 	}
 
 	return account.Restore(&account.State{
@@ -24,6 +20,7 @@ func ToAccount(p *model.User, roleIDs []uint) (*account.Account, error) {
 		RoleIDs:  roleIDs,
 	})
 }
+
 func ToAccountPO(account *account.Account) (*model.User, error) {
 	s, err := account.Snapshot()
 	if err != nil {
