@@ -9,7 +9,7 @@ import (
 
 func ToRole(po *model.Role, permissionIDs []uint) (*role.Role, error) {
 	if po == nil {
-		return nil, errors.New("invalid role persistence object")
+		return nil, errors.New("invalid role model")
 	}
 
 	return role.Restore(&role.State{
