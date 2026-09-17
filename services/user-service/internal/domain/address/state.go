@@ -3,8 +3,8 @@ package address
 import "errors"
 
 type State struct {
-	ID        uint
-	UserID    uint
+	ID        int64
+	UserID    int64
 	Address   string
 	Phone     string
 	Recipient string

@@ -35,7 +35,7 @@ func (h *RegisterHandler) Handle(ctx context.Context, cmd *RegisterCommand) erro
 	}
 
 	// by default, the role id 1 represents user
-	a, err := account.New(uint(h.idGenerator.NextID()), cmd.Username, string(encryptedPassword), []uint{1})
+	a, err := account.New(h.idGenerator.NextID(), cmd.Username, string(encryptedPassword), []int64{1})
 	if err != nil {
 		return err
 	}

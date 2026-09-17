@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	ID        uint `gorm:"primaryKey"`
+	ID        int64 `gorm:"primaryKey"`
 	Username  string
 	Password  string
 	Status    account.Status

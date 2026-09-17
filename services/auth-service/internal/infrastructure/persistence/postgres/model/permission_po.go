@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Permission struct {
-	ID        uint `gorm:"primaryKey"`
+	ID        int64 `gorm:"primaryKey"`
 	Code      string
 	Resource  string
 	Action    string

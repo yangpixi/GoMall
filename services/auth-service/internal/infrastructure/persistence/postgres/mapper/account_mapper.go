@@ -7,7 +7,7 @@ import (
 	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/model"
 )
 
-func ToAccount(p *model.User, roleIDs []uint) (*account.Account, error) {
+func ToAccount(p *model.User, roleIDs []int64) (*account.Account, error) {
 	if p == nil {
 		return nil, errors.New("invalid account model")
 	}

@@ -7,7 +7,7 @@ import (
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres/model"
 )
 
-func ToProfile(p *model.Profile, addressIDs []uint) (*profile.Profile, error) {
+func ToProfile(p *model.Profile, addressIDs []int64) (*profile.Profile, error) {
 
 	if p == nil {
 		return nil, errors.New("invalid profile model")

@@ -14,8 +14,8 @@ type JWT struct {
 }
 
 type claims struct {
-	RoleIDs []uint `json:"role_ids"`
-	Kind    string `json:"kind"`
+	RoleIDs []int64 `json:"role_ids"`
+	Kind    string  `json:"kind"`
 	jwt.RegisteredClaims
 }
 
@@ -39,24 +39,24 @@ func (J *JWT) RefreshExpire() time.Duration {
 	return J.refreshExpiration
 }
 
-func (J *JWT) Token(username string, roleIDs []uint) (string, int, error) {
-	token, err := J.generateToken(username, roleIDs, J.expiration, "access")
+func (J *JWT) Token(sub string, roleIDs []int64) (string, int, error) {
+	token, err := J.generateToken(sub, roleIDs, J.expiration, "access")
 	return token, int(J.expiration.Seconds()), err
 }
 
-func (J *JWT) RefreshToken(username string, roleIDs []uint) (string, error) {
-	token, err := J.generateToken(username, roleIDs, J.refreshExpiration, "refresh")
+func (J *JWT) RefreshToken(sub string, roleIDs []int64) (string, error) {
+	token, err := J.generateToken(sub, roleIDs, J.refreshExpiration, "refresh")
 	return token, err
 }
 
 // generateToken internal method to generate token
-func (J *JWT) generateToken(username string, roleIDs []uint, expiration time.Duration, kind string) (string, error) {
+func (J *JWT) generateToken(sub string, roleIDs []int64, expiration time.Duration, kind string) (string, error) {
 	c := &claims{
 		RoleIDs: roleIDs,
 		Kind:    kind,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "GoMall",
-			Subject:   username,
+			Subject:   sub,
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiration)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
@@ -71,7 +71,7 @@ func (J *JWT) generateToken(username string, roleIDs []uint, expiration time.Dur
 	return ss, nil
 }
 
-func (J *JWT) ParseAndValidate(token string) (username, kind string, roleIDs []uint, err error) {
+func (J *JWT) ParseAndValidate(token string) (sub, kind string, roleIDs []int64, err error) {
 	res, err := jwt.ParseWithClaims(token, &claims{}, func(token *jwt.Token) (any, error) {
 		return []byte(J.secretKey), nil
 	},

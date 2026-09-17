@@ -17,13 +17,13 @@ func NewRoleRepo(db *gorm.DB) role.Repository {
 	return &RoleRepo{db: db}
 }
 
-func (r *RoleRepo) FindByUserID(ctx context.Context, id uint) ([]*role.Role, error) {
+func (r *RoleRepo) FindByUserID(ctx context.Context, id int64) ([]*role.Role, error) {
 	userRole, err := gorm.G[model.UserRole](r.db).Where("user_id = ?", id).Find(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	ids := make([]uint, 0, len(userRole))
+	ids := make([]int64, 0, len(userRole))
 	for _, ur := range userRole {
 		ids = append(ids, ur.RoleID)
 	}
@@ -35,7 +35,7 @@ func (r *RoleRepo) FindByUserID(ctx context.Context, id uint) ([]*role.Role, err
 
 	roles := make([]*role.Role, 0, len(rolePOs))
 	for _, rp := range rolePOs {
-		pIDs := make([]uint, 0)
+		pIDs := make([]int64, 0)
 		err = r.db.WithContext(ctx).Model(&model.RolePermission{}).Where("role_id IN ?", &ids).Pluck("permission_id", &pIDs).Error
 		if err != nil {
 			return nil, err
@@ -55,7 +55,7 @@ func (r *RoleRepo) FindByUserID(ctx context.Context, id uint) ([]*role.Role, err
 	return roles, nil
 }
 
-func (r *RoleRepo) GrantByUserID(ctx context.Context, userID uint, roleIDs []uint) error {
+func (r *RoleRepo) GrantByUserID(ctx context.Context, userID int64, roleIDs []int64) error {
 
 	urs := make([]model.UserRole, 0, len(roleIDs))
 

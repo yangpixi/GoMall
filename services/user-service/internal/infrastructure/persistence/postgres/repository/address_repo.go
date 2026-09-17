@@ -18,7 +18,7 @@ func NewAddressRepo(db *gorm.DB) address.Repository {
 	return &AddressRepo{db: db}
 }
 
-func (r *AddressRepo) FindByUserID(ctx context.Context, userID uint) ([]*address.Address, error) {
+func (r *AddressRepo) FindByUserID(ctx context.Context, userID int64) ([]*address.Address, error) {
 	// len(addresses) might be zero
 	addresses, err := gorm.G[*model.UserAddress](r.db).Where("user_id = ?", userID).Find(ctx)
 	if err != nil {

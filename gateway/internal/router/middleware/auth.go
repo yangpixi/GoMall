@@ -10,8 +10,8 @@ import (
 )
 
 type claims struct {
-	RoleIDs []uint `json:"role_ids"`
-	Kind    string `json:"kind"`
+	RoleIDs []int64 `json:"role_ids"`
+	Kind    string  `json:"kind"`
 	jwt.RegisteredClaims
 }
 

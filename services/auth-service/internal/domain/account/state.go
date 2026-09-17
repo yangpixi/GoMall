@@ -5,11 +5,11 @@ import (
 )
 
 type State struct {
-	ID       uint
+	ID       int64
 	Username string
 	Password string
 	Status   Status
-	RoleIDs  []uint
+	RoleIDs  []int64
 }
 
 func Restore(s *State) (*Account, error) {

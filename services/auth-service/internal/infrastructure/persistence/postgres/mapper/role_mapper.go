@@ -7,7 +7,7 @@ import (
 	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/model"
 )
 
-func ToRole(po *model.Role, permissionIDs []uint) (*role.Role, error) {
+func ToRole(po *model.Role, permissionIDs []int64) (*role.Role, error) {
 	if po == nil {
 		return nil, errors.New("invalid role model")
 	}

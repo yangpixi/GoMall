@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Role struct {
-	ID        uint `gorm:"primarykey"`
+	ID        int64 `gorm:"primarykey"`
 	Code      string
 	Name      string
 	CreatedAt time.Time
