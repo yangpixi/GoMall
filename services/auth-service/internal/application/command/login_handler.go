@@ -36,12 +36,12 @@ func (h *LoginHandler) Handle(ctx context.Context, cmd *LoginCommand) (*LoginRes
 		return nil, err
 	}
 
-	t, expire, err := h.issuer.Token(strconv.FormatInt(int64(user.ID()), 10), user.RoleIDs())
+	t, expire, err := h.issuer.Token(strconv.FormatInt(user.ID(), 10), user.RoleIDs())
 	if err != nil {
 		return nil, err
 	}
 
-	rt, err := h.issuer.RefreshToken(strconv.FormatInt(int64(user.ID()), 10), user.RoleIDs())
+	rt, err := h.issuer.RefreshToken(strconv.FormatInt(user.ID(), 10), user.RoleIDs())
 	if err != nil {
 		return nil, err
 	}
