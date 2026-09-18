@@ -3,6 +3,7 @@ package command
 import (
 	"context"
 	"errors"
+	"strconv"
 
 	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
 )
@@ -35,12 +36,12 @@ func (h *LoginHandler) Handle(ctx context.Context, cmd *LoginCommand) (*LoginRes
 		return nil, err
 	}
 
-	t, expire, err := h.issuer.Token(user.Username(), user.RoleIDs())
+	t, expire, err := h.issuer.Token(strconv.FormatInt(user.ID(), 10), user.RoleIDs())
 	if err != nil {
 		return nil, err
 	}
 
-	rt, err := h.issuer.RefreshToken(user.Username(), user.RoleIDs())
+	rt, err := h.issuer.RefreshToken(strconv.FormatInt(user.ID(), 10), user.RoleIDs())
 	if err != nil {
 		return nil, err
 	}

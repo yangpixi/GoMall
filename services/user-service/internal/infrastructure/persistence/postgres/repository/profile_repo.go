@@ -19,7 +19,7 @@ func NewProfileRepo(db *gorm.DB) profile.Repository {
 	return &ProfileRepo{db: db}
 }
 
-func (r *ProfileRepo) FindByUserID(ctx context.Context, userID uint) (*profile.Profile, error) {
+func (r *ProfileRepo) FindByUserID(ctx context.Context, userID int64) (*profile.Profile, error) {
 	if userID == 0 {
 		return nil, profile.ErrInvalidUserID
 	}
@@ -32,11 +32,25 @@ func (r *ProfileRepo) FindByUserID(ctx context.Context, userID uint) (*profile.P
 		return nil, fmt.Errorf("failed to query user %d's profile %w", userID, err)
 	}
 
-	addIDs := make([]uint, 0)
+	addIDs := make([]int64, 0)
 	err = r.db.WithContext(ctx).Model(&model.UserAddress{}).Where("user_id = ?", userID).Pluck("id", &addIDs).Error
 	if err != nil {
 		return nil, fmt.Errorf("failed to query user %d's profile %w", userID, err)
 	}
 
 	return mapper.ToProfile(p, addIDs)
+}
+
+func (r *ProfileRepo) Save(ctx context.Context, profile *profile.Profile) error {
+	po, err := mapper.ToProfilePO(profile)
+	if err != nil {
+		return fmt.Errorf("failed to save profile: %w", err)
+	}
+
+	err = gorm.G[model.Profile](r.db).Create(ctx, po)
+	if err != nil {
+		return fmt.Errorf("failed to save profile: %w", err)
+	}
+
+	return nil
 }

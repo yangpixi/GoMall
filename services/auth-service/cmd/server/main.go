@@ -20,7 +20,7 @@ func main() {
 	l := logger.New("auth", slog.LevelInfo)
 	slog.SetDefault(l)
 
-	c, err := config.Load("./config/config.example.yaml")
+	c, err := config.Load("./config/config.yaml")
 
 	if err != nil {
 		panic(fmt.Errorf("failed to load config: %w", err))
@@ -68,10 +68,9 @@ func main() {
 	}
 
 	r := http.NewRouter(authHandler)
-
+	slog.Info("starting server", "port", c.Server.Port)
 	if err = r.Run(fmt.Sprintf(":%d", c.Server.Port)); err != nil {
-		panic(fmt.Errorf("failed to run http server on specific port: %w", err))
+		panic(fmt.Errorf("failed to run http server on the specific port: %w", err))
 	}
 
-	slog.Info("service starts successfully", "port", c.Server.Port)
 }

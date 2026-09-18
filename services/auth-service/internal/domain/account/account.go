@@ -12,15 +12,15 @@ var (
 )
 
 type Account struct {
-	id       uint
+	id       int64
 	username string
 	password string
 	status   Status
-	roleIDs  []uint
+	roleIDs  []int64
 }
 
 // New create a new account aggregate root instance
-func New(id uint, username, password string, roleIDs []uint) (*Account, error) {
+func New(id int64, username, password string, roleIDs []int64) (*Account, error) {
 	if username == "" {
 		return nil, ErrMissingUsername
 	}
@@ -50,12 +50,12 @@ func (a *Account) Snapshot() (*State, error) {
 		ID:       a.id,
 		Username: a.username,
 		Password: a.password,
-		Status:   1,
+		Status:   a.status,
 		RoleIDs:  a.roleIDs,
 	}, nil
 }
 
-func (a *Account) ID() uint {
+func (a *Account) ID() int64 {
 	return a.id
 }
 
@@ -63,7 +63,7 @@ func (a *Account) Username() string {
 	return a.username
 }
 
-func (a *Account) RoleIDs() []uint {
+func (a *Account) RoleIDs() []int64 {
 	return a.roleIDs
 }
 

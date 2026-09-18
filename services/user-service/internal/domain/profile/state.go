@@ -3,12 +3,12 @@ package profile
 import "errors"
 
 type State struct {
-	UserID     uint
+	UserID     int64
 	Nickname   string
 	Phone      string
 	Email      string
 	Avatar     string
-	AddressIDs []uint
+	AddressIDs []int64
 }
 
 func Restore(s *State) (*Profile, error) {

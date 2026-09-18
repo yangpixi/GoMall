@@ -3,7 +3,7 @@ package http
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/auth-service/internal/interface/http/handler"
-	"github.com/yangpixi/GoMall/auth-service/internal/interface/http/middleware"
+	"github.com/yangpixi/GoMall/shared/http/middleware"
 )
 
 func NewRouter(handler *handler.AuthHandler) *gin.Engine {

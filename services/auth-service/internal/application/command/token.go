@@ -1,7 +1,7 @@
 package command
 
 type TokenIssuer interface {
-	Token(username string, roleIDs []uint) (string, int, error)
-	RefreshToken(username string, roleIDs []uint) (string, error)
-	ParseAndValidate(token string) (username, kind string, roleIDs []uint, err error)
+	Token(sub string, roleIDs []int64) (string, int, error)
+	RefreshToken(sub string, roleIDs []int64) (string, error)
+	ParseAndValidate(token string) (sub, kind string, roleIDs []int64, err error)
 }

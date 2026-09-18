@@ -1,8 +1,8 @@
 package role
 
 type Role struct {
-	id            uint
+	id            int64
 	code          string
 	name          string
-	permissionIDs []uint
+	permissionIDs []int64
 }

@@ -5,5 +5,5 @@ import (
 )
 
 type Repository interface {
-	FindByUserID(ctx context.Context, userID uint) ([]*Address, error)
+	FindByUserID(ctx context.Context, userID int64) ([]*Address, error)
 }

@@ -16,7 +16,7 @@ func main() {
 	l := logger.New("gateway", slog.LevelInfo)
 	slog.SetDefault(l)
 
-	c, err := config.Load("../config/config.yaml")
+	c, err := config.Load("./config/config.yaml")
 	if err != nil {
 		panic(fmt.Errorf("failed to load config: %w", err))
 	}
@@ -29,9 +29,9 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
+	slog.Info("starting server", "port", c.Server.Port)
 	if err := server.ListenAndServe(); err != nil {
 		panic(fmt.Errorf("http server starting failed: %w", err))
 	}
 
-	slog.Info("service starts successfully", "port", "8080")
 }

@@ -1,7 +1,7 @@
 package permission
 
 type Permission struct {
-	ID       uint
+	ID       int64
 	code     string
 	resource string
 	action   string

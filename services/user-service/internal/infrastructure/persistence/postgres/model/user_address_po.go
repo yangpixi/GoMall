@@ -3,8 +3,8 @@ package model
 import "time"
 
 type UserAddress struct {
-	ID        uint `gorm:"primaryKey"`
-	UserID    uint
+	ID        int64 `gorm:"primaryKey"`
+	UserID    int64
 	Address   string
 	Phone     string
 	Recipient string

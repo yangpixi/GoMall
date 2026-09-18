@@ -17,13 +17,13 @@ func NewAccountRepo(db *gorm.DB) account.Repository {
 	return &AccountRepo{db: db}
 }
 
-func (a *AccountRepo) FindByID(ctx context.Context, id uint) (*account.Account, error) {
+func (a *AccountRepo) FindByID(ctx context.Context, id int64) (*account.Account, error) {
 	po, err := gorm.G[model.User](a.db).Where("id = ?", id).First(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var ids []uint
+	var ids []int64
 
 	err = a.db.WithContext(ctx).Model(&model.UserRole{}).Where("user_id = ?", id).Pluck("role_id", &ids).Error
 	if err != nil {
@@ -39,7 +39,7 @@ func (a *AccountRepo) FindByUsername(ctx context.Context, username string) (*acc
 		return nil, account.ErrAccountNotFound
 	}
 
-	var ids []uint
+	var ids []int64
 
 	err = a.db.WithContext(ctx).Model(&model.UserRole{}).Where("user_id = ?", po.ID).Pluck("role_id", &ids).Error
 	if err != nil {
