@@ -11,6 +11,7 @@ import (
 type Config struct {
 	Server   Server
 	Database Database
+	JWT      JWT
 }
 
 type Server struct {
@@ -27,6 +28,10 @@ type Database struct {
 type Connection struct {
 	Port int    `yaml:"port"`
 	Host string `yaml:"host"`
+}
+
+type JWT struct {
+	SecretKey string `yaml:"secret-key"`
 }
 
 // Load the very config

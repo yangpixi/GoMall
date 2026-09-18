@@ -27,6 +27,17 @@ func New(userID int64, nickname, phone, email, avatar string) (*Profile, error) 
 
 }
 
+func (p *Profile) Snapshot() (*State, error) {
+	return &State{
+		UserID:     p.userID,
+		Nickname:   p.nickname,
+		Phone:      p.phone,
+		Email:      p.email,
+		Avatar:     p.avatar,
+		AddressIDs: p.addressIDs,
+	}, nil
+}
+
 // AppendAddress adds a new address for a user
 func (p *Profile) AppendAddress(addressID int64) error {
 	if addressID == 0 {

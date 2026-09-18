@@ -42,10 +42,12 @@ func statusFromCode(code int) int {
 	switch code {
 	case 10001:
 		return http.StatusForbidden
-	case 10002, 10004, 10005, 10006:
+	case 10002, 10004, 10005, 10006, 20001, 20002, 20003, 21001:
 		return http.StatusBadRequest
 	case 10003:
 		return http.StatusUnauthorized
+	case 20004:
+		return http.StatusNotFound
 	default:
 		return http.StatusBadRequest
 	}

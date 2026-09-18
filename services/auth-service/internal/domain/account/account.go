@@ -50,7 +50,7 @@ func (a *Account) Snapshot() (*State, error) {
 		ID:       a.id,
 		Username: a.username,
 		Password: a.password,
-		Status:   1,
+		Status:   a.status,
 		RoleIDs:  a.roleIDs,
 	}, nil
 }

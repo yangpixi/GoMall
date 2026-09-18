@@ -40,3 +40,17 @@ func (r *ProfileRepo) FindByUserID(ctx context.Context, userID int64) (*profile.
 
 	return mapper.ToProfile(p, addIDs)
 }
+
+func (r *ProfileRepo) Save(ctx context.Context, profile *profile.Profile) error {
+	po, err := mapper.ToProfilePO(profile)
+	if err != nil {
+		return fmt.Errorf("failed to save profile: %w", err)
+	}
+
+	err = gorm.G[model.Profile](r.db).Create(ctx, po)
+	if err != nil {
+		return fmt.Errorf("failed to save profile: %w", err)
+	}
+
+	return nil
+}
