@@ -31,7 +31,7 @@ type Connection struct {
 }
 
 type JWT struct {
-	SecretKey string `yaml:"secret-key"`
+	SecretKey string `yaml:"secret-key" validate:"required"`
 }
 
 // Load the very config
