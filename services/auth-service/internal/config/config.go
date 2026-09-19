@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/goccy/go-yaml"
 )
 
@@ -20,9 +21,9 @@ type Server struct {
 
 type Database struct {
 	Connection Connection `yaml:"connection"`
-	User       string     `yaml:"user"`
-	Password   string     `yaml:"password"`
-	DB         string     `yaml:"db"`
+	User       string     `yaml:"user" validate:"required"`
+	Password   string     `yaml:"password" validate:"required"`
+	DB         string     `yaml:"db" validate:"required"`
 }
 
 type Connection struct {
@@ -31,9 +32,9 @@ type Connection struct {
 }
 
 type JWT struct {
-	SecretKey         string `yaml:"secret-key"`
-	Expiration        int    `yaml:"expiration"`
-	RefreshExpiration int    `yaml:"refresh-expiration"`
+	SecretKey         string `yaml:"secret-key" validate:"required"`
+	Expiration        int    `yaml:"expiration" validate:"required"`
+	RefreshExpiration int    `yaml:"refresh-expiration" validate:"required"`
 }
 
 // Load config for server port, database etc
@@ -43,9 +44,18 @@ func Load(path string) (*Config, error) {
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
-	c := &Config{}
+	// setting default value for service
+	c := &Config{
+		Server: Server{Port: 8081},
+		Database: Database{
+			Connection: Connection{
+				Port: 5432,
+				Host: "127.0.0.1",
+			},
+		},
+	}
 
-	if err := yaml.Unmarshal(b, c); err != nil {
+	if err := yaml.UnmarshalWithOptions(b, c, yaml.Validator(validator.New())); err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
