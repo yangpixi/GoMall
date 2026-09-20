@@ -20,3 +20,21 @@ func ToAddress(a *model.UserAddress) (*address.Address, error) {
 		Recipient: a.Recipient,
 	})
 }
+
+func ToAddressPO(a *address.Address) (*model.UserAddress, error) {
+	if a == nil {
+		return nil, errors.New("invalid address entity")
+	}
+
+	s, err := a.Snapshot()
+	if err != nil {
+		return nil, errors.New("failed to take a snapshot of address entity")
+	}
+
+	return &model.UserAddress{
+		ID:      s.ID,
+		UserID:  s.UserID,
+		Address: s.Address,
+		Phone:   s.Phone,
+	}, nil
+}

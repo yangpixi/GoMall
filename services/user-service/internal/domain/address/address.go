@@ -21,3 +21,13 @@ func New(id, userID int64, address, phone, recipient string) (*Address, error) {
 		recipient: recipient,
 	}, nil
 }
+
+func (a *Address) Snapshot() (*State, error) {
+	return &State{
+		ID:        a.id,
+		UserID:    a.userID,
+		Address:   a.address,
+		Phone:     a.phone,
+		Recipient: a.recipient,
+	}, nil
+}

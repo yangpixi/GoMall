@@ -36,3 +36,17 @@ func (r *AddressRepo) FindByUserID(ctx context.Context, userID int64) ([]*addres
 
 	return res, nil
 }
+
+func (r *AddressRepo) Save(ctx context.Context, a *address.Address) error {
+	po, err := mapper.ToAddressPO(a)
+	if err != nil {
+		return err
+	}
+
+	err = gorm.G[model.UserAddress](r.db).Create(ctx, po)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
