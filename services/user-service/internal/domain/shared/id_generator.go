@@ -1,4 +1,4 @@
-package address
+package shared
 
 // IDGenerator generate snowflake id for entity
 type IDGenerator interface {
