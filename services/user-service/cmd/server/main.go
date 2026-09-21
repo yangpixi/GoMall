@@ -6,6 +6,7 @@ import (
 
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command"
 	"github.com/yangpixi/GoMall/services/user-service/internal/config"
+	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres/repository"
 	"github.com/yangpixi/GoMall/services/user-service/internal/interface/http"
@@ -28,18 +29,34 @@ func main() {
 	}
 
 	profileRepo := repository.NewProfileRepo(db)
+	addressRepo := repository.NewAddressRepo(db)
 
-	handler, err := command.NewCreateProfileHandler(profileRepo)
+	generator, err := id.NewGenerator(1)
+	if err != nil {
+		panic(fmt.Errorf("failed to init id generator: %w", err))
+	}
+
+	appProfileHandler, err := command.NewCreateProfileHandler(profileRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile handler: %w", err))
 	}
 
-	profileHandler, err := httpHandler.NewProfileHandler(handler)
+	profileHandler, err := httpHandler.NewProfileHandler(appProfileHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile http handler: %w", err))
 	}
 
-	router := http.NewRouter(profileHandler, []byte(c.JWT.SecretKey))
+	appAddressHandler, err := command.NewCreateAddressHandler(addressRepo, generator)
+	if err != nil {
+		panic(fmt.Errorf("failed to init address handler: %w", err))
+	}
+
+	addressHandler, err := httpHandler.NewAddressHandler(appAddressHandler)
+	if err != nil {
+		panic(fmt.Errorf("failed to init addressHandler"))
+	}
+
+	router := http.NewRouter(profileHandler, addressHandler, []byte(c.JWT.SecretKey))
 	slog.Info("starting server", "port", c.Server.Port)
 	if err = router.Run(fmt.Sprintf(":%d", c.Server.Port)); err != nil {
 		panic(fmt.Errorf("failed to serve http server on the specific port: %d, error: %w", c.Server.Port, err))

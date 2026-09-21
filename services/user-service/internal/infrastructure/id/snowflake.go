@@ -2,14 +2,14 @@ package id
 
 import (
 	"github.com/bwmarrin/snowflake"
-	"github.com/yangpixi/GoMall/services/user-service/internal/domain/address"
+	"github.com/yangpixi/GoMall/services/user-service/internal/domain/shared"
 )
 
 type SnowflakeGenerator struct {
 	node *snowflake.Node
 }
 
-func NewGenerator(nodeID int64) (address.IDGenerator, error) {
+func NewGenerator(nodeID int64) (shared.IDGenerator, error) {
 	node, err := snowflake.NewNode(nodeID)
 
 	return &SnowflakeGenerator{node: node}, err

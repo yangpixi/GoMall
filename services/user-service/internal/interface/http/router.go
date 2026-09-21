@@ -6,13 +6,14 @@ import (
 	"github.com/yangpixi/GoMall/shared/http/middleware"
 )
 
-func NewRouter(h *handler.ProfileHandler, secretKey []byte) *gin.Engine {
+func NewRouter(profileHandler *handler.ProfileHandler, addressHandler *handler.AddressHandler, secretKey []byte) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery(), gin.Logger())
 	r.Use(middleware.ErrorHandler())
 
 	user := r.Group("/api/v1/user")
-	user.POST("/profile/create", middleware.RequireJWT(secretKey), h.Handler)
+	user.POST("/profile/create", middleware.RequireJWT(secretKey), profileHandler.CreateHandler)
+	user.POST("/address/create", middleware.RequireJWT(secretKey), addressHandler.CreateHandler)
 
 	return r
 }

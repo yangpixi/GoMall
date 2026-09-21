@@ -28,8 +28,8 @@ func NewProfileHandler(h *command.CreateProfileHandler) (*ProfileHandler, error)
 	return &ProfileHandler{handler: h}, nil
 }
 
-// Handler handle profile creation request
-func (h *ProfileHandler) Handler(c *gin.Context) {
+// CreateHandler handle profile creation request
+func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req createProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
