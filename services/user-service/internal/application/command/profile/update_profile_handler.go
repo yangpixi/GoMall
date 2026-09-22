@@ -51,10 +51,6 @@ func (h *UpdateProfileHandler) Handle(ctx context.Context, cmd *UpdateProfileCom
 		}
 	}
 
-	if cmd.Avatar != nil {
-		// TODO: upload avatar image to oss, then changes user's avatar url
-	}
-
 	err = h.repo.Update(ctx, p)
 	if err != nil {
 		return err
