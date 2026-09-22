@@ -20,6 +20,7 @@ func NewUpdateProfileHandler(repo profile.Repository) (*UpdateProfileHandler, er
 	return &UpdateProfileHandler{repo: repo}, nil
 }
 
+// Handle user profile updating command except user's avatar
 func (h *UpdateProfileHandler) Handle(ctx context.Context, cmd *UpdateProfileCommand) error {
 	userID, ok := id.UserIDFromCtx(ctx)
 

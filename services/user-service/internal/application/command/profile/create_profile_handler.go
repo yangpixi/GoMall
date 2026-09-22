@@ -25,7 +25,7 @@ func (h *CreateProfileHandler) Handle(ctx context.Context, cmd *CreateProfileCom
 		return profile.ErrInvalidUserID
 	}
 
-	p, err := profile.New(userID, cmd.Nickname, cmd.Phone, cmd.Email, cmd.Avatar)
+	p, err := profile.New(userID, cmd.Nickname, cmd.Phone, cmd.Email)
 	if err != nil {
 		return err
 	}

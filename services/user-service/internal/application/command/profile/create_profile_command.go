@@ -5,5 +5,4 @@ type CreateProfileCommand struct {
 	Nickname string
 	Phone    string
 	Email    string
-	Avatar   string
 }

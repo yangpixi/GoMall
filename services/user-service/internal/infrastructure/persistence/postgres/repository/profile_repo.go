@@ -65,7 +65,6 @@ func (r *ProfileRepo) Update(ctx context.Context, p *profile.Profile) error {
 		"nickname": po.Nickname,
 		"phone":    po.Phone,
 		"email":    po.Email,
-		"avatar":   po.Avatar,
 	})
 
 	if err != nil {

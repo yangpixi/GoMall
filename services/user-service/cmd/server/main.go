@@ -37,22 +37,32 @@ func main() {
 		panic(fmt.Errorf("failed to init id generator: %w", err))
 	}
 
-	appProfileHandler, err := profile.NewCreateProfileHandler(profileRepo)
+	appProfileCreateHandler, err := profile.NewCreateProfileHandler(profileRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile handler: %w", err))
 	}
 
-	profileHandler, err := httpHandler.NewProfileHandler(appProfileHandler)
+	appProfileUpdateHandler, err := profile.NewUpdateProfileHandler(profileRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init profile handler: %w", err))
+	}
+
+	profileHandler, err := httpHandler.NewProfileHandler(appProfileCreateHandler, appProfileUpdateHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile http handler: %w", err))
 	}
 
-	appAddressHandler, err := address.NewCreateAddressHandler(addressRepo, generator)
+	appAddressCreateHandler, err := address.NewCreateAddressHandler(addressRepo, generator)
 	if err != nil {
 		panic(fmt.Errorf("failed to init address handler: %w", err))
 	}
 
-	addressHandler, err := httpHandler.NewAddressHandler(appAddressHandler)
+	appAddressUpdateHandler, err := address.NewUpdateAddressHandler(addressRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init address handler: %w", err))
+	}
+
+	addressHandler, err := httpHandler.NewAddressHandler(appAddressCreateHandler, appAddressUpdateHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init addressHandler"))
 	}

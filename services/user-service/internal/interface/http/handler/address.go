@@ -15,7 +15,7 @@ type AddressHandler struct {
 }
 
 type createAddressRequest struct {
-	UserID    int64  `json:"userId" binding:"required"`
+	UserID    int64  `json:"userId"` // not required for user, but required for admin
 	Address   string `json:"address" binding:"required"`
 	Phone     string `json:"phone" binding:"required"`
 	Recipient string `json:"recipient" binding:"required"`
@@ -40,11 +40,9 @@ func (h *AddressHandler) CreateHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req createAddressRequest
 	if err := c.ShouldBindJSON(req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
 	err := h.createHandler.Handle(c.Request.Context(), &address.CreateAddressCommand{
@@ -55,11 +53,9 @@ func (h *AddressHandler) CreateHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
 	response.OK[string](c, "address creation successfully")
@@ -69,11 +65,9 @@ func (h *AddressHandler) UpdateHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req updateAddressRequest
 	if err := c.ShouldBindJSON(req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
 	err := h.updateHandler.Handle(c.Request.Context(), &address.UpdateAddressCommand{
@@ -84,11 +78,9 @@ func (h *AddressHandler) UpdateHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
 	response.OK[string](c, "address updating successfully")

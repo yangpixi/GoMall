@@ -10,22 +10,29 @@ import (
 )
 
 type ProfileHandler struct {
-	handler *profile.CreateProfileHandler
+	createHandler *profile.CreateProfileHandler
+	updateHandler *profile.UpdateProfileHandler
 }
 
 type createProfileRequest struct {
-	UserID   int64  `json:"userId" binding:"required"`
+	UserID   int64  `json:"userId"` // not required for user, but required for admin
 	Nickname string `json:"nickname" binding:"required"`
 	Phone    string `json:"phone" binding:"required"`
 	Email    string `json:"email" binding:"required"`
-	Avatar   string `json:"avatar" binding:"required"`
 }
 
-func NewProfileHandler(h *profile.CreateProfileHandler) (*ProfileHandler, error) {
-	if h == nil {
+type updateProfileRequest struct {
+	UserID   int64   `json:"userId"`
+	Nickname *string `json:"nickname"`
+	Phone    *string `json:"phone"`
+	Email    *string `json:"email"`
+}
+
+func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler) (*ProfileHandler, error) {
+	if ch == nil || uh == nil {
 		return nil, errors.New("invalid profile handler")
 	}
-	return &ProfileHandler{handler: h}, nil
+	return &ProfileHandler{createHandler: ch, updateHandler: uh}, nil
 }
 
 // CreateHandler handle profile creation request
@@ -33,28 +40,48 @@ func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req createProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
-	err := h.handler.Handle(c.Request.Context(), &profile.CreateProfileCommand{
+	err := h.createHandler.Handle(c.Request.Context(), &profile.CreateProfileCommand{
 		UserID:   req.UserID,
 		Nickname: req.Nickname,
 		Phone:    req.Phone,
 		Email:    req.Email,
-		Avatar:   req.Avatar,
 	})
 
-	if err = c.ShouldBindJSON(&req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+	if err != nil {
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
 	response.OK[string](c, "profile creation successfully")
+}
+
+func (h *ProfileHandler) UpdateHandler(c *gin.Context) {
+	var bizErr *errs.BusinessError
+	var req updateProfileRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+	}
+
+	err := h.updateHandler.Handle(c.Request.Context(), &profile.UpdateProfileCommand{
+		UserID:   req.UserID,
+		Nickname: req.Nickname,
+		Phone:    req.Phone,
+		Email:    req.Email,
+	})
+
+	if err != nil {
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+	}
+
+	response.OK[string](c, "profile updating successfully")
 }

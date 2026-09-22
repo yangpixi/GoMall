@@ -20,7 +20,7 @@ var phonePattern = regexp.MustCompile(`^1[3-9][0-9]{9}$`)
 // New creates a new profile for a user.
 // It is usually called during registration, so the address
 // can be left unset and filled in later.
-func New(userID int64, nickname, phone, email, avatar string) (*Profile, error) {
+func New(userID int64, nickname, phone, email string) (*Profile, error) {
 	if nickname == "" || phone == "" || userID == 0 {
 		return nil, ErrInvalidProfile
 	}
@@ -30,7 +30,6 @@ func New(userID int64, nickname, phone, email, avatar string) (*Profile, error) 
 		nickname: nickname,
 		phone:    phone,
 		email:    email,
-		avatar:   avatar,
 	}, nil
 
 }
