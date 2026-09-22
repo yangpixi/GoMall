@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/yangpixi/GoMall/services/user-service/internal/domain/address"
@@ -18,11 +19,23 @@ func NewAddressRepo(db *gorm.DB) address.Repository {
 	return &AddressRepo{db: db}
 }
 
+func (r *AddressRepo) FindByID(ctx context.Context, id int64) (*address.Address, error) {
+	a, err := gorm.G[*model.UserAddress](r.db).Where("id = ?", id).First(ctx)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, address.ErrAddressNotFound
+		}
+		return nil, fmt.Errorf("failed to query address, id: %d, error: %w", id, err)
+	}
+
+	return mapper.ToAddress(a)
+}
+
 func (r *AddressRepo) FindByUserID(ctx context.Context, userID int64) ([]*address.Address, error) {
 	// len(addresses) might be zero
 	addresses, err := gorm.G[*model.UserAddress](r.db).Where("user_id = ?", userID).Find(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to select %d's address: %w", userID, err)
+		return nil, fmt.Errorf("failed to query %d's address: %w", userID, err)
 	}
 
 	res := make([]*address.Address, 0, len(addresses))
