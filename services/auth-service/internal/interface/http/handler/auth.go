@@ -41,11 +41,10 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+
 	}
 
 	result, err := a.login.Handle(c.Request.Context(), &command.LoginCommand{
@@ -53,11 +52,10 @@ func (a *AuthHandler) LoginHandler(c *gin.Context) {
 		Password: req.Password,
 	})
 	if err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+
 	}
 
 	response.OK[*command.LoginResult](c, result)
@@ -68,11 +66,10 @@ func (a *AuthHandler) RegisterHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req registerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+
 	}
 
 	err := a.register.Handle(c.Request.Context(), &command.RegisterCommand{
@@ -81,11 +78,10 @@ func (a *AuthHandler) RegisterHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+
 	}
 
 	response.OK[string](c, "register successfully")
@@ -95,21 +91,18 @@ func (a *AuthHandler) RefreshHandler(c *gin.Context) {
 	var bizErr *errs.BusinessError
 	var req refreshRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
+
 	}
 
 	res, err := a.refresh.Handle(c.Request.Context(), &command.RefreshCommand{RefreshToken: req.RefreshToken})
 
 	if err != nil {
-		if errors.As(err, &bizErr) {
-			_ = c.Error(bizErr)
-			c.Abort()
-			return
-		}
+		_ = c.Error(bizErr)
+		c.Abort()
+		return
 	}
 
 	response.OK[*command.RefreshResult](c, res)

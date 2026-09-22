@@ -1,4 +1,4 @@
-package command
+package address
 
 type CreateAddressCommand struct {
 	UserID    int64 // only for admin side

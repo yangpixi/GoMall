@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/yangpixi/GoMall/services/user-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/address"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
 	"github.com/yangpixi/GoMall/services/user-service/internal/config"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres"
@@ -36,22 +37,32 @@ func main() {
 		panic(fmt.Errorf("failed to init id generator: %w", err))
 	}
 
-	appProfileHandler, err := command.NewCreateProfileHandler(profileRepo)
+	appProfileCreateHandler, err := profile.NewCreateProfileHandler(profileRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile handler: %w", err))
 	}
 
-	profileHandler, err := httpHandler.NewProfileHandler(appProfileHandler)
+	appProfileUpdateHandler, err := profile.NewUpdateProfileHandler(profileRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init profile handler: %w", err))
+	}
+
+	profileHandler, err := httpHandler.NewProfileHandler(appProfileCreateHandler, appProfileUpdateHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile http handler: %w", err))
 	}
 
-	appAddressHandler, err := command.NewCreateAddressHandler(addressRepo, generator)
+	appAddressCreateHandler, err := address.NewCreateAddressHandler(addressRepo, generator)
 	if err != nil {
 		panic(fmt.Errorf("failed to init address handler: %w", err))
 	}
 
-	addressHandler, err := httpHandler.NewAddressHandler(appAddressHandler)
+	appAddressUpdateHandler, err := address.NewUpdateAddressHandler(addressRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init address handler: %w", err))
+	}
+
+	addressHandler, err := httpHandler.NewAddressHandler(appAddressCreateHandler, appAddressUpdateHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init addressHandler"))
 	}

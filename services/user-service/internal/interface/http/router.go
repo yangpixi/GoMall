@@ -13,7 +13,10 @@ func NewRouter(profileHandler *handler.ProfileHandler, addressHandler *handler.A
 
 	user := r.Group("/api/v1/user")
 	user.POST("/profile/create", middleware.RequireJWT(secretKey), profileHandler.CreateHandler)
+	user.POST("/profile/update", middleware.RequireJWT(secretKey), profileHandler.UpdateHandler)
+
 	user.POST("/address/create", middleware.RequireJWT(secretKey), addressHandler.CreateHandler)
+	user.POST("/address/update", middleware.RequireJWT(secretKey), addressHandler.UpdateHandler)
 
 	return r
 }
