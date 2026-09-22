@@ -1,5 +1,10 @@
 package profile
 
+import (
+	"regexp"
+	"strings"
+)
+
 type Profile struct {
 	userID     int64
 	nickname   string
@@ -8,6 +13,9 @@ type Profile struct {
 	avatar     string
 	addressIDs []int64
 }
+
+// phonePattern validates phone number user changed
+var phonePattern = regexp.MustCompile(`^1[3-9][0-9]{9}$`)
 
 // New creates a new profile for a user.
 // It is usually called during registration, so the address
@@ -38,11 +46,41 @@ func (p *Profile) Snapshot() (*State, error) {
 	}, nil
 }
 
-// AppendAddress adds a new address for a user
-func (p *Profile) AppendAddress(addressID int64) error {
-	if addressID == 0 {
-		return ErrInvalidAddressID
+func (p *Profile) ChangeNickname(name string) error {
+	if strings.TrimSpace(name) == "" || len(name) > 10 || len(name) < 3 {
+		return ErrInvalidNickname
 	}
-	p.addressIDs = append(p.addressIDs, addressID)
+
+	p.nickname = name
+	return nil
+}
+
+func (p *Profile) ChangePhone(phone string) error {
+	phone = strings.TrimSpace(phone)
+
+	if !phonePattern.MatchString(phone) {
+		return ErrInvalidPhone
+	}
+
+	p.phone = phone
+	return nil
+}
+
+func (p *Profile) ChangeEmail(email string) error {
+	if strings.TrimSpace(email) == "" {
+		return ErrInvalidEmail
+	}
+
+	p.email = email
+	return nil
+}
+
+// ChangeAvatar only changes avatar url from oss
+func (p *Profile) ChangeAvatar(url string) error {
+	if strings.TrimSpace(url) == "" {
+		return ErrInvalidAvatar
+	}
+
+	p.avatar = url
 	return nil
 }

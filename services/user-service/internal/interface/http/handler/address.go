@@ -4,13 +4,13 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yangpixi/GoMall/services/user-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/address"
 	"github.com/yangpixi/GoMall/shared/errs"
 	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type AddressHandler struct {
-	handler *command.CreateAddressHandler
+	handler *address.CreateAddressHandler
 }
 
 type createAddressRequest struct {
@@ -20,7 +20,7 @@ type createAddressRequest struct {
 	Recipient string
 }
 
-func NewAddressHandler(h *command.CreateAddressHandler) (*AddressHandler, error) {
+func NewAddressHandler(h *address.CreateAddressHandler) (*AddressHandler, error) {
 	if h == nil {
 		return nil, errors.New("invalid address handler")
 	}
@@ -39,7 +39,7 @@ func (h *AddressHandler) CreateHandler(c *gin.Context) {
 		}
 	}
 
-	err := h.handler.Handle(c.Request.Context(), &command.CreateAddressCommand{
+	err := h.handler.Handle(c.Request.Context(), &address.CreateAddressCommand{
 		UserID:    req.UserID,
 		Address:   req.Address,
 		Phone:     req.Phone,

@@ -4,13 +4,13 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yangpixi/GoMall/services/user-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
 	"github.com/yangpixi/GoMall/shared/errs"
 	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type ProfileHandler struct {
-	handler *command.CreateProfileHandler
+	handler *profile.CreateProfileHandler
 }
 
 type createProfileRequest struct {
@@ -21,7 +21,7 @@ type createProfileRequest struct {
 	Avatar   string `json:"avatar" binding:"required"`
 }
 
-func NewProfileHandler(h *command.CreateProfileHandler) (*ProfileHandler, error) {
+func NewProfileHandler(h *profile.CreateProfileHandler) (*ProfileHandler, error) {
 	if h == nil {
 		return nil, errors.New("invalid profile handler")
 	}
@@ -40,7 +40,7 @@ func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 		}
 	}
 
-	err := h.handler.Handle(c.Request.Context(), &command.CreateProfileCommand{
+	err := h.handler.Handle(c.Request.Context(), &profile.CreateProfileCommand{
 		UserID:   req.UserID,
 		Nickname: req.Nickname,
 		Phone:    req.Phone,
