@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
-	"github.com/yangpixi/GoMall/shared/errs"
 	"github.com/yangpixi/GoMall/shared/response"
 )
 
@@ -15,14 +14,14 @@ type ProfileHandler struct {
 }
 
 type createProfileRequest struct {
-	UserID   int64  `json:"userId"` // not required for user, but required for admin
+	UserID   int64  `json:"userId,string"` // not required for user, but required for admin
 	Nickname string `json:"nickname" binding:"required"`
 	Phone    string `json:"phone" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 }
 
 type updateProfileRequest struct {
-	UserID   int64   `json:"userId"`
+	UserID   int64   `json:"userId,string"`
 	Nickname *string `json:"nickname"`
 	Phone    *string `json:"phone"`
 	Email    *string `json:"email"`
@@ -37,10 +36,9 @@ func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfi
 
 // CreateHandler handle profile creation request
 func (h *ProfileHandler) CreateHandler(c *gin.Context) {
-	var bizErr *errs.BusinessError
 	var req createProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
@@ -53,7 +51,7 @@ func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
@@ -62,10 +60,9 @@ func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 }
 
 func (h *ProfileHandler) UpdateHandler(c *gin.Context) {
-	var bizErr *errs.BusinessError
 	var req updateProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
@@ -78,7 +75,7 @@ func (h *ProfileHandler) UpdateHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}

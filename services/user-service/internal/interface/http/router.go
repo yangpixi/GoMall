@@ -17,6 +17,7 @@ func NewRouter(profileHandler *handler.ProfileHandler, addressHandler *handler.A
 
 	user.POST("/address/create", middleware.RequireJWT(secretKey), addressHandler.CreateHandler)
 	user.POST("/address/update", middleware.RequireJWT(secretKey), addressHandler.UpdateHandler)
+	user.POST("/address/delete", middleware.RequireJWT(secretKey), addressHandler.DeleteHandler)
 
 	return r
 }

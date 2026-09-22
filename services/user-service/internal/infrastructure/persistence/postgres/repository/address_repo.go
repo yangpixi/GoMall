@@ -63,3 +63,16 @@ func (r *AddressRepo) Save(ctx context.Context, a *address.Address) error {
 
 	return nil
 }
+
+func (r *AddressRepo) Delete(ctx context.Context, id, userID int64) error {
+	rowsAffected, err := gorm.G[model.UserAddress](r.db).Where("id = ? AND user_id = ?", id, userID).Delete(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to delete address: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return address.ErrAddressNotFound
+	}
+
+	return nil
+}

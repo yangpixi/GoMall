@@ -62,7 +62,12 @@ func main() {
 		panic(fmt.Errorf("failed to init address handler: %w", err))
 	}
 
-	addressHandler, err := httpHandler.NewAddressHandler(appAddressCreateHandler, appAddressUpdateHandler)
+	appAddressDeleteHandler, err := address.NewDeleteAddressHandler(addressRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init address handler: %w", err))
+	}
+
+	addressHandler, err := httpHandler.NewAddressHandler(appAddressCreateHandler, appAddressUpdateHandler, appAddressDeleteHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init addressHandler"))
 	}
