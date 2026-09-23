@@ -6,9 +6,11 @@ import (
 
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/address"
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/query"
 	"github.com/yangpixi/GoMall/services/user-service/internal/config"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres"
+	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres/reader"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres/repository"
 	"github.com/yangpixi/GoMall/services/user-service/internal/interface/http"
 	httpHandler "github.com/yangpixi/GoMall/services/user-service/internal/interface/http/handler"
@@ -47,7 +49,13 @@ func main() {
 		panic(fmt.Errorf("failed to init profile handler: %w", err))
 	}
 
-	profileHandler, err := httpHandler.NewProfileHandler(appProfileCreateHandler, appProfileUpdateHandler)
+	profileReader := reader.NewProfileReader(db)
+	getProfileHandler, err := query.NewGetProfileHandler(profileReader)
+	if err != nil {
+		panic(fmt.Errorf("failed to init profile handler: %w", err))
+	}
+
+	profileHandler, err := httpHandler.NewProfileHandler(appProfileCreateHandler, appProfileUpdateHandler, getProfileHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile http handler: %w", err))
 	}
@@ -62,7 +70,12 @@ func main() {
 		panic(fmt.Errorf("failed to init address handler: %w", err))
 	}
 
-	addressHandler, err := httpHandler.NewAddressHandler(appAddressCreateHandler, appAddressUpdateHandler)
+	appAddressDeleteHandler, err := address.NewDeleteAddressHandler(addressRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init address handler: %w", err))
+	}
+
+	addressHandler, err := httpHandler.NewAddressHandler(appAddressCreateHandler, appAddressUpdateHandler, appAddressDeleteHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init addressHandler"))
 	}

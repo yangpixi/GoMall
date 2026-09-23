@@ -5,42 +5,42 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
-	"github.com/yangpixi/GoMall/shared/errs"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/query"
 	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type ProfileHandler struct {
 	createHandler *profile.CreateProfileHandler
 	updateHandler *profile.UpdateProfileHandler
+	detailHandler *query.GetProfileHandler
 }
 
 type createProfileRequest struct {
-	UserID   int64  `json:"userId"` // not required for user, but required for admin
+	UserID   int64  `json:"userId,string"` // not required for user, but required for admin
 	Nickname string `json:"nickname" binding:"required"`
 	Phone    string `json:"phone" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 }
 
 type updateProfileRequest struct {
-	UserID   int64   `json:"userId"`
+	UserID   int64   `json:"userId,string"`
 	Nickname *string `json:"nickname"`
 	Phone    *string `json:"phone"`
 	Email    *string `json:"email"`
 }
 
-func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler) (*ProfileHandler, error) {
-	if ch == nil || uh == nil {
+func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler, dh *query.GetProfileHandler) (*ProfileHandler, error) {
+	if ch == nil || uh == nil || dh == nil {
 		return nil, errors.New("invalid profile handler")
 	}
-	return &ProfileHandler{createHandler: ch, updateHandler: uh}, nil
+	return &ProfileHandler{createHandler: ch, updateHandler: uh, detailHandler: dh}, nil
 }
 
 // CreateHandler handle profile creation request
 func (h *ProfileHandler) CreateHandler(c *gin.Context) {
-	var bizErr *errs.BusinessError
 	var req createProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
@@ -53,7 +53,7 @@ func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
@@ -62,10 +62,9 @@ func (h *ProfileHandler) CreateHandler(c *gin.Context) {
 }
 
 func (h *ProfileHandler) UpdateHandler(c *gin.Context) {
-	var bizErr *errs.BusinessError
 	var req updateProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
@@ -78,10 +77,22 @@ func (h *ProfileHandler) UpdateHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		_ = c.Error(bizErr)
+		_ = c.Error(err)
 		c.Abort()
 		return
 	}
 
 	response.OK[string](c, "profile updating successfully")
+}
+
+func (h *ProfileHandler) DetailHandler(c *gin.Context) {
+	vo, err := h.detailHandler.Handle(c.Request.Context())
+
+	if err != nil {
+		_ = c.Error(err)
+		c.Abort()
+		return
+	}
+
+	response.OK(c, vo)
 }
