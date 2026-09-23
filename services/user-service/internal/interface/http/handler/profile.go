@@ -5,12 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
+	"github.com/yangpixi/GoMall/services/user-service/internal/application/query"
 	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type ProfileHandler struct {
 	createHandler *profile.CreateProfileHandler
 	updateHandler *profile.UpdateProfileHandler
+	detailHandler *query.GetProfileHandler
 }
 
 type createProfileRequest struct {
@@ -27,11 +29,11 @@ type updateProfileRequest struct {
 	Email    *string `json:"email"`
 }
 
-func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler) (*ProfileHandler, error) {
-	if ch == nil || uh == nil {
+func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler, dh *query.GetProfileHandler) (*ProfileHandler, error) {
+	if ch == nil || uh == nil || dh == nil {
 		return nil, errors.New("invalid profile handler")
 	}
-	return &ProfileHandler{createHandler: ch, updateHandler: uh}, nil
+	return &ProfileHandler{createHandler: ch, updateHandler: uh, detailHandler: dh}, nil
 }
 
 // CreateHandler handle profile creation request
@@ -81,4 +83,16 @@ func (h *ProfileHandler) UpdateHandler(c *gin.Context) {
 	}
 
 	response.OK[string](c, "profile updating successfully")
+}
+
+func (h *ProfileHandler) DetailHandler(c *gin.Context) {
+	vo, err := h.detailHandler.Handle(c.Request.Context())
+
+	if err != nil {
+		_ = c.Error(err)
+		c.Abort()
+		return
+	}
+
+	response.OK(c, vo)
 }
