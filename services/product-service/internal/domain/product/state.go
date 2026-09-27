@@ -13,7 +13,7 @@ type State struct {
 	SkuIDs      []int64
 }
 
-func Snapshot(s *State) (*Product, error) {
+func Restore(s *State) (*Product, error) {
 	if s == nil || strings.TrimSpace(s.Name) == "" || strings.TrimSpace(s.Description) == "" {
 		return nil, errors.New("invalid product state")
 	}
