@@ -5,6 +5,7 @@ use (
 	./services/auth-service
 	./services/order-service
 	./services/payment-service
+	./services/product-service
 	./services/stock-service
 	./services/user-service
 	./shared
