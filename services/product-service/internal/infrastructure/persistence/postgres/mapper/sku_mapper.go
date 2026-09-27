@@ -13,3 +13,17 @@ func ToSKU(s *model.SKU) (*sku.SKU, error) {
 		Specification: s.Specification,
 	})
 }
+
+func ToSkuPO(s *sku.SKU) (*model.SKU, error) {
+	po, err := s.Snapshot()
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.SKU{
+		ID:            po.ID,
+		ProductID:     po.ProductID,
+		Price:         po.Price,
+		Specification: po.Specification,
+	}, nil
+}

@@ -15,6 +15,10 @@ type ProductRepo struct {
 	db *gorm.DB
 }
 
+func NewProductRepo(db *gorm.DB) product.Repository {
+	return &ProductRepo{db: db}
+}
+
 func (r *ProductRepo) FindByID(ctx context.Context, id int64) (*product.Product, error) {
 	p, err := gorm.G[*model.Product](r.db).Where("id = ?", id).First(ctx)
 	if err != nil {
@@ -34,4 +38,18 @@ func (r *ProductRepo) FindByID(ctx context.Context, id int64) (*product.Product,
 	}
 
 	return mapper.ToProduct(p, skuIDs)
+}
+
+func (r *ProductRepo) Save(ctx context.Context, p *product.Product) error {
+	po, err := mapper.ToProductPO(p)
+	if err != nil {
+		return fmt.Errorf("failed to save product: %w", err)
+	}
+
+	err = gorm.G[model.Product](r.db).Create(ctx, po)
+	if err != nil {
+		return fmt.Errorf("failed to save product: %w", err)
+	}
+
+	return nil
 }

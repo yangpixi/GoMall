@@ -21,3 +21,16 @@ func New(id, productID int64, price int, spec string) (*SKU, error) {
 		specification: spec,
 	}, nil
 }
+
+func (s *SKU) Snapshot() (*State, error) {
+	if s.id == 0 || s.productID == 0 || strings.TrimSpace(s.specification) == "" {
+		return nil, ErrInvalidSKU
+	}
+
+	return &State{
+		ID:            s.id,
+		ProductID:     s.productID,
+		Price:         s.price,
+		Specification: s.specification,
+	}, nil
+}

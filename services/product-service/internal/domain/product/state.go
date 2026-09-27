@@ -8,6 +8,7 @@ import (
 type State struct {
 	ID          int64
 	Name        string
+	ShopID      int64
 	Description string
 	Status      int
 	SkuIDs      []int64
@@ -21,6 +22,7 @@ func Restore(s *State) (*Product, error) {
 	return &Product{
 		id:          s.ID,
 		name:        s.Name,
+		shopID:      s.ShopID,
 		description: s.Description,
 		status:      s.Status,
 		skuIDs:      s.SkuIDs,

@@ -14,3 +14,18 @@ func ToProduct(p *model.Product, skuIDs []int64) (*product.Product, error) {
 		SkuIDs:      skuIDs,
 	})
 }
+
+func ToProductPO(p *product.Product) (*model.Product, error) {
+	s, err := p.Snapshot()
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Product{
+		ID:          s.ID,
+		Name:        s.Name,
+		ShopID:      s.ShopID,
+		Description: s.Description,
+		Status:      s.Status,
+	}, nil
+}
