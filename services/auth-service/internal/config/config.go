@@ -1,7 +1,7 @@
 package config
 
 import (
-	"errors"
+	"bytes"
 	"fmt"
 	"os"
 
@@ -37,11 +37,15 @@ type JWT struct {
 	RefreshExpiration int    `yaml:"refresh-expiration" validate:"required"`
 }
 
-// Load config for server port, database etc
+// Load the config
 func Load(path string) (*Config, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
+	}
+
+	if len(b) == 0 {
+		return nil, fmt.Errorf("config is empty")
 	}
 
 	// setting default value for service
@@ -55,13 +59,17 @@ func Load(path string) (*Config, error) {
 		},
 	}
 
-	if err := yaml.UnmarshalWithOptions(b, c, yaml.Validator(validator.New())); err != nil {
-		return nil, fmt.Errorf("failed to load config: %w", err)
-	}
+	dec := yaml.NewDecoder(
+		bytes.NewReader(b),
+		yaml.Validator(validator.New()),
+		yaml.Strict(),
+	)
 
-	if c.JWT.SecretKey == "" {
-		return nil, errors.New("missing secretKey")
+	err = dec.Decode(c)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse config: %w", err)
 	}
 
 	return c, nil
+
 }

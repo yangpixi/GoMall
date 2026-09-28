@@ -11,18 +11,20 @@ type Product struct {
 	skuIDs      []int64
 }
 
-func New(id, shopID int64, name, des string, status int, skuIDs []int64) (*Product, error) {
+// New creates new product instance
+// skuIDs can be added later
+func New(id, shopID int64, name, des string, status int) (*Product, error) {
 	if strings.TrimSpace(name) == "" || strings.TrimSpace(des) == "" || id == 0 || shopID == 0 {
 		return nil, ErrInvalidProduct
 	}
 
+	// default value for status field is zero
 	return &Product{
 		id:          id,
 		name:        name,
 		shopID:      shopID,
 		description: des,
 		status:      status,
-		skuIDs:      skuIDs,
 	}, nil
 }
 

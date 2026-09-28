@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS product
     name        VARCHAR(200) NOT NULL,
     shop_id     BIGINT       NOT NULL,
     description VARCHAR(1024),
-    status      SMALLINT     NOT NULL DEFAULT 1,
+    status      SMALLINT     NOT NULL DEFAULT 0,
     created_at  TIMESTAMPTZ           DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMPTZ           DEFAULT CURRENT_TIMESTAMP,
 
