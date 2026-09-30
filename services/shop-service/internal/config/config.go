@@ -10,9 +10,9 @@ import (
 )
 
 type Config struct {
-	Server   Server   `yaml:"server"`
-	Database Database `yaml:"database"`
-	JWT      JWT      `yaml:"jwt"`
+	Server   Server
+	Database Database
+	JWT      JWT
 }
 
 type Server struct {
@@ -27,17 +27,15 @@ type Database struct {
 }
 
 type Connection struct {
-	Host string `yaml:"host"`
 	Port int    `yaml:"port"`
+	Host string `yaml:"host"`
 }
 
 type JWT struct {
-	SecretKey         string `yaml:"secret-key" validate:"required"`
-	Expiration        int    `yaml:"expiration" validate:"required"`
-	RefreshExpiration int    `yaml:"refresh-expiration" validate:"required"`
+	SecretKey string `yaml:"secret-key" validate:"required"`
 }
 
-// Load the config
+// Load the very config
 func Load(path string) (*Config, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
@@ -50,7 +48,7 @@ func Load(path string) (*Config, error) {
 
 	// setting default value for service
 	c := &Config{
-		Server: Server{Port: 8081},
+		Server: Server{Port: 8084},
 		Database: Database{
 			Connection: Connection{
 				Port: 5432,

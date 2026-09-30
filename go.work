@@ -6,6 +6,7 @@ use (
 	./services/order-service
 	./services/payment-service
 	./services/product-service
+	./services/shop-service
 	./services/stock-service
 	./services/user-service
 	./shared
