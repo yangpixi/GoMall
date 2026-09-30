@@ -3,6 +3,7 @@ module github.com/yangpixi/GoMall/shop-service
 go 1.26.5
 
 require (
+	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.15 // indirect
 	github.com/go-playground/locales v0.14.2 // indirect
 	github.com/go-playground/universal-translator v0.18.2 // indirect
