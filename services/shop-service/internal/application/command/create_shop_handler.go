@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/yangpixi/GoMall/services/shop-service/internal/domain/shop"
 	uID "github.com/yangpixi/GoMall/shared/http/id"
-	"github.com/yangpixi/GoMall/shop-service/internal/domain/shop"
 )
 
 type CreateShopHandler struct {
@@ -13,12 +13,12 @@ type CreateShopHandler struct {
 	idGenerator shop.IDGenerator
 }
 
-func NewCreateShopHandler(repo shop.Repository) (*CreateShopHandler, error) {
-	if repo == nil {
+func NewCreateShopHandler(repo shop.Repository, generator shop.IDGenerator) (*CreateShopHandler, error) {
+	if repo == nil || generator == nil {
 		return nil, errors.New("invalid shop repository")
 	}
 
-	return &CreateShopHandler{repo: repo}, nil
+	return &CreateShopHandler{repo: repo, idGenerator: generator}, nil
 }
 
 func (h *CreateShopHandler) Handle(ctx context.Context, cmd *CreateShopCommand) error {

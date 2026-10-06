@@ -1,4 +1,4 @@
-module github.com/yangpixi/GoMall/auth-service
+module github.com/yangpixi/GoMall/services/auth-service
 
 go 1.26.5
 

@@ -4,7 +4,8 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yangpixi/GoMall/auth-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/application/command"
+
 	"github.com/yangpixi/GoMall/shared/response"
 )
 

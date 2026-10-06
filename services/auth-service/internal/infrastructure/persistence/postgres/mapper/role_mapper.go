@@ -3,8 +3,8 @@ package mapper
 import (
 	"errors"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/role"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/model"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/role"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/persistence/postgres/model"
 )
 
 func ToRole(po *model.Role, permissionIDs []int64) (*role.Role, error) {

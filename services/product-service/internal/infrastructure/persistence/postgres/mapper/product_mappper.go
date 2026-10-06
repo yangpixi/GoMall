@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"github.com/yangpixi/GoMall/product-service/internal/domain/product"
-	"github.com/yangpixi/GoMall/product-service/internal/infrastructure/persistence/postgres/model"
+	"github.com/yangpixi/GoMall/services/product-service/internal/domain/product"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres/model"
 )
 
 func ToProduct(p *model.Product, skuIDs []int64) (*product.Product, error) {

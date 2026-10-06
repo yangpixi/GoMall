@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yangpixi/GoMall/product-service/internal/application/command/product"
-	"github.com/yangpixi/GoMall/product-service/internal/application/command/sku"
+	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
+	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
 )
 
 type ProductHandler struct {

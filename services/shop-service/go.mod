@@ -1,4 +1,4 @@
-module github.com/yangpixi/GoMall/shop-service
+module github.com/yangpixi/GoMall/services/shop-service
 
 go 1.26.5
 

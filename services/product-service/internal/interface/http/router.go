@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/yangpixi/GoMall/product-service/internal/interface/http/handler"
+	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http/handler"
 	"github.com/yangpixi/GoMall/shared/http/middleware"
 )
 

@@ -14,6 +14,8 @@ func New(secretKey []byte) *http.ServeMux {
 
 	mux.Handle("/api/v1/auth/", proxy.New("http://localhost:8081"))
 	mux.Handle("/api/v1/user/", requiredJWT(proxy.New("http://localhost:8082")))
+	mux.Handle("/api/v1/product/", requiredJWT(proxy.New("http://localhost:8083")))
+	mux.Handle("/api/v1/shop/", requiredJWT(proxy.New("http://localhost:8084")))
 
 	return mux
 }

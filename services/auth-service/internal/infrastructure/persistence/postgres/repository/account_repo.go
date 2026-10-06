@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/mapper"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/model"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/account"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/persistence/postgres/mapper"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/persistence/postgres/model"
 	"gorm.io/gorm"
 )
 
