@@ -5,14 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
-	"github.com/yangpixi/GoMall/services/user-service/internal/application/query"
+	profile2 "github.com/yangpixi/GoMall/services/user-service/internal/application/query/profile"
 	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type ProfileHandler struct {
 	createHandler *profile.CreateProfileHandler
 	updateHandler *profile.UpdateProfileHandler
-	detailHandler *query.GetProfileHandler
+	detailHandler *profile2.GetProfileHandler
 }
 
 type createProfileRequest struct {
@@ -29,7 +29,7 @@ type updateProfileRequest struct {
 	Email    *string `json:"email"`
 }
 
-func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler, dh *query.GetProfileHandler) (*ProfileHandler, error) {
+func NewProfileHandler(ch *profile.CreateProfileHandler, uh *profile.UpdateProfileHandler, dh *profile2.GetProfileHandler) (*ProfileHandler, error) {
 	if ch == nil || uh == nil || dh == nil {
 		return nil, errors.New("invalid profile handler")
 	}

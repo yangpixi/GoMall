@@ -6,7 +6,7 @@ import (
 
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/address"
 	"github.com/yangpixi/GoMall/services/user-service/internal/application/command/profile"
-	"github.com/yangpixi/GoMall/services/user-service/internal/application/query"
+	profile2 "github.com/yangpixi/GoMall/services/user-service/internal/application/query/profile"
 	"github.com/yangpixi/GoMall/services/user-service/internal/config"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/user-service/internal/infrastructure/persistence/postgres"
@@ -50,7 +50,7 @@ func main() {
 	}
 
 	profileReader := reader.NewProfileReader(db)
-	getProfileHandler, err := query.NewGetProfileHandler(profileReader)
+	getProfileHandler, err := profile2.NewGetProfileHandler(profileReader)
 	if err != nil {
 		panic(fmt.Errorf("failed to init profile handler: %w", err))
 	}
