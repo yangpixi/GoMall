@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/yangpixi/GoMall/product-service/internal/domain/product"
-	"github.com/yangpixi/GoMall/product-service/internal/infrastructure/id"
+	"github.com/yangpixi/GoMall/services/product-service/internal/domain/product"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/id"
 )
 
 type CreateProductHandler struct {

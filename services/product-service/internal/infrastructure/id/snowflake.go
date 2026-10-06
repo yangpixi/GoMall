@@ -2,7 +2,7 @@ package id
 
 import (
 	"github.com/bwmarrin/snowflake"
-	"github.com/yangpixi/GoMall/product-service/internal/domain/shared"
+	"github.com/yangpixi/GoMall/services/product-service/internal/domain/shared"
 )
 
 type SnowflakeGenerator struct {

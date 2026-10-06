@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"github.com/yangpixi/GoMall/shop-service/internal/domain/shop"
-	"github.com/yangpixi/GoMall/shop-service/internal/infrastructure/persistence/postgres/model"
+	"github.com/yangpixi/GoMall/services/shop-service/internal/domain/shop"
+	"github.com/yangpixi/GoMall/services/shop-service/internal/infrastructure/persistence/postgres/model"
 )
 
 func ToShop(s *model.Shop) (*shop.Shop, error) {

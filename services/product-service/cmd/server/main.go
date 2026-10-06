@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/yangpixi/GoMall/product-service/internal/application/command/product"
-	"github.com/yangpixi/GoMall/product-service/internal/application/command/sku"
-	"github.com/yangpixi/GoMall/product-service/internal/config"
-	"github.com/yangpixi/GoMall/product-service/internal/infrastructure/persistence/postgres"
-	"github.com/yangpixi/GoMall/product-service/internal/infrastructure/persistence/postgres/repository"
-	"github.com/yangpixi/GoMall/product-service/internal/interface/http"
-	"github.com/yangpixi/GoMall/product-service/internal/interface/http/handler"
+	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
+	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
+	"github.com/yangpixi/GoMall/services/product-service/internal/config"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres/repository"
+	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http"
+	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http/handler"
 	"github.com/yangpixi/GoMall/shared/logger"
 )
 

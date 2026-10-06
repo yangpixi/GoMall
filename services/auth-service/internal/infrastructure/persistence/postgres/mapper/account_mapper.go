@@ -3,8 +3,8 @@ package mapper
 import (
 	"errors"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/model"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/account"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/persistence/postgres/model"
 )
 
 func ToAccount(p *model.User, roleIDs []int64) (*account.Account, error) {

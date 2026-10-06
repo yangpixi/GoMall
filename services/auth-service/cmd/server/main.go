@@ -5,14 +5,14 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/application/command"
-	"github.com/yangpixi/GoMall/auth-service/internal/config"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/id"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/jwt"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres"
-	"github.com/yangpixi/GoMall/auth-service/internal/infrastructure/persistence/postgres/repository"
-	"github.com/yangpixi/GoMall/auth-service/internal/interface/http"
-	"github.com/yangpixi/GoMall/auth-service/internal/interface/http/handler"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/config"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/id"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/jwt"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/persistence/postgres"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/infrastructure/persistence/postgres/repository"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/interface/http"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/interface/http/handler"
 	"github.com/yangpixi/GoMall/shared/logger"
 )
 

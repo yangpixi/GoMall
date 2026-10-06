@@ -3,8 +3,8 @@ package sku
 import (
 	"context"
 
-	"github.com/yangpixi/GoMall/product-service/internal/domain/sku"
-	"github.com/yangpixi/GoMall/product-service/internal/infrastructure/id"
+	"github.com/yangpixi/GoMall/services/product-service/internal/domain/sku"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/id"
 )
 
 type CreateSKUHandler struct {

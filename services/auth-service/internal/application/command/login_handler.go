@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/account"
 )
 
 type LoginHandler struct {

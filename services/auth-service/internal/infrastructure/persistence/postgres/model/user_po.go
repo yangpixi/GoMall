@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/account"
 )
 
 type User struct {

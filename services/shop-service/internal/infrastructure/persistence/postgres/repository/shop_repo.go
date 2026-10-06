@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/yangpixi/GoMall/shop-service/internal/domain/shop"
-	"github.com/yangpixi/GoMall/shop-service/internal/infrastructure/persistence/postgres/mapper"
-	"github.com/yangpixi/GoMall/shop-service/internal/infrastructure/persistence/postgres/model"
+	"github.com/yangpixi/GoMall/services/shop-service/internal/domain/shop"
+	"github.com/yangpixi/GoMall/services/shop-service/internal/infrastructure/persistence/postgres/mapper"
+	"github.com/yangpixi/GoMall/services/shop-service/internal/infrastructure/persistence/postgres/model"
 	"gorm.io/gorm"
 )
 

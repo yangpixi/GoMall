@@ -3,7 +3,7 @@ package postgres
 import (
 	"fmt"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/config"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"

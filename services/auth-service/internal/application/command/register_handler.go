@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/account"
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/role"
-	"github.com/yangpixi/GoMall/auth-service/internal/domain/shared"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/account"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/role"
+	"github.com/yangpixi/GoMall/services/auth-service/internal/domain/shared"
 	"golang.org/x/crypto/bcrypt"
 )
 
