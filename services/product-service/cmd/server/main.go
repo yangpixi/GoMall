@@ -7,6 +7,7 @@ import (
 	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
 	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
 	"github.com/yangpixi/GoMall/services/product-service/internal/config"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres/repository"
 	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http"
@@ -31,7 +32,12 @@ func main() {
 	productRepo := repository.NewProductRepo(db)
 	skuRepo := repository.NewSKURepo(db)
 
-	appProductHandler, err := product.NewCreateProductHandler(productRepo)
+	generator, err := id.NewGenerator(1)
+	if err != nil {
+		panic(fmt.Errorf("failed to init id generator"))
+	}
+
+	appProductHandler, err := product.NewCreateProductHandler(productRepo, generator)
 	if err != nil {
 		panic(fmt.Errorf("failed to init application product handler: %w", err))
 	}
