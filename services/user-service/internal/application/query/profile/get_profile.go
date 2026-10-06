@@ -1,4 +1,4 @@
-package query
+package profile
 
 import (
 	"context"
@@ -7,11 +7,15 @@ import (
 	"github.com/yangpixi/GoMall/shared/http/id"
 )
 
-type GetProfileHandler struct {
-	reader ProfileReader
+type GetProfileQuery struct {
+	UserID int64 // only for admin side
 }
 
-func NewGetProfileHandler(r ProfileReader) (*GetProfileHandler, error) {
+type GetProfileHandler struct {
+	reader Reader
+}
+
+func NewGetProfileHandler(r Reader) (*GetProfileHandler, error) {
 	if r == nil {
 		return nil, errors.New("invalid profile repository")
 	}
@@ -19,7 +23,7 @@ func NewGetProfileHandler(r ProfileReader) (*GetProfileHandler, error) {
 	return &GetProfileHandler{reader: r}, nil
 }
 
-func (h *GetProfileHandler) Handle(ctx context.Context) (*ProfileVO, error) {
+func (h *GetProfileHandler) Handle(ctx context.Context) (*VO, error) {
 	userID, ok := id.UserIDFromCtx(ctx)
 	if !ok {
 		return nil, errors.New("failed to retrieve userID from context")
