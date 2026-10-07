@@ -1,5 +1,6 @@
 server:
   port: 8084
+  grpc-port: 9094
 
 database:
   connection:

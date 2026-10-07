@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
 	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
+	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type ProductHandler struct {
@@ -55,6 +56,8 @@ func (h *ProductHandler) CreateProductHandler(c *gin.Context) {
 		return
 	}
 
+	response.OK(c, "product created successfully")
+
 }
 
 func (h *ProductHandler) CreateSKUHandler(c *gin.Context) {
@@ -76,4 +79,6 @@ func (h *ProductHandler) CreateSKUHandler(c *gin.Context) {
 		c.Abort()
 		return
 	}
+
+	response.OK(c, "sku created successfully")
 }

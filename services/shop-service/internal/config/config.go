@@ -16,7 +16,8 @@ type Config struct {
 }
 
 type Server struct {
-	Port int `yaml:"port"`
+	Port     int `yaml:"port"`
+	GRPCPort int `yaml:"grpc-port"`
 }
 
 type Database struct {

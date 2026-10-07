@@ -10,4 +10,5 @@ use (
 	./services/stock-service
 	./services/user-service
 	./shared
+	./api
 )
