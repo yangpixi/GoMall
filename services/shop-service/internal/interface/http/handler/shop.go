@@ -46,6 +46,6 @@ func (h *ShopHandler) CreateHandler(c *gin.Context) {
 		return
 	}
 
-	response.OK(c, "shop creation successfully")
+	response.OK(c, "shop created successfully")
 
 }

@@ -20,7 +20,7 @@ func NewShopReader(db *gorm.DB) *ShopReader {
 
 func (r *ShopReader) GetShopID(ctx context.Context, userID int64) (*shop.VO, error) {
 	var shopID int64
-	err := r.db.WithContext(ctx).Model(model.Shop{}).Where("user_id = ?", userID).Pluck("id", &shopID).Error
+	err := r.db.WithContext(ctx).Model(model.Shop{}).Where("owner_id = ?", userID).Pluck("id", &shopID).Error
 	if err != nil {
 		return nil, fmt.Errorf("failed to get shop id, id: %d, error: %w", userID, err)
 	}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package shop.v1;
+
+option go_package = "github.com/yangpixi/GoMall/api/gen/go/shop/v1;shopv1";
+
+service ShopService {
+  rpc GetShopID(GetShopIDRequest) returns (GetShopIDResponse);
+}
+
+message GetShopIDRequest {
+  int64 user_id = 1;
+}
+
+message GetShopIDResponse {
+  int64 shop_id = 1;
+}

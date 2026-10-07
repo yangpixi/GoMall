@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/yangpixi/GoMall/services/product-service/internal/application/port"
 	"github.com/yangpixi/GoMall/services/product-service/internal/domain/product"
 	"github.com/yangpixi/GoMall/services/product-service/internal/domain/shared"
 )
@@ -11,20 +12,24 @@ import (
 type CreateProductHandler struct {
 	repo        product.Repository
 	idGenerator shared.IDGenerator
+	shopReader  port.ShopIDReader
 }
 
-func NewCreateProductHandler(r product.Repository, generator shared.IDGenerator) (*CreateProductHandler, error) {
-	if r == nil || generator == nil {
+func NewCreateProductHandler(r product.Repository, generator shared.IDGenerator, sReader port.ShopIDReader) (*CreateProductHandler, error) {
+	if r == nil || generator == nil || sReader == nil {
 		return nil, errors.New("invalid product repository")
 	}
 
-	return &CreateProductHandler{repo: r, idGenerator: generator}, nil
+	return &CreateProductHandler{repo: r, idGenerator: generator, shopReader: sReader}, nil
 }
 
 func (h *CreateProductHandler) Handle(ctx context.Context, cmd *CreateProductCommand) error {
-	// TODO: shopID should be retrieved from shop-service
-	// shopID from command is used for admin endpoint
-	p, err := product.New(h.idGenerator.NextID(), cmd.ShopID, cmd.Name, cmd.Description, cmd.Status)
+	sInfo, err := h.shopReader.GetShopID(ctx)
+	if err != nil {
+		return err
+	}
+
+	p, err := product.New(h.idGenerator.NextID(), sInfo.ShopID, cmd.Name, cmd.Description, cmd.Status)
 	if err != nil {
 		return err
 	}

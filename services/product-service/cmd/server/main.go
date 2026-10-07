@@ -4,15 +4,19 @@ import (
 	"fmt"
 	"log/slog"
 
+	shopv1 "github.com/yangpixi/GoMall/api/gen/go/shop/v1"
 	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
 	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
 	"github.com/yangpixi/GoMall/services/product-service/internal/config"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres/repository"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/rpc"
 	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http"
 	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http/handler"
 	"github.com/yangpixi/GoMall/shared/logger"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -37,7 +41,18 @@ func main() {
 		panic(fmt.Errorf("failed to init id generator"))
 	}
 
-	appProductHandler, err := product.NewCreateProductHandler(productRepo, generator)
+	conn, err := grpc.NewClient("localhost:9094",
+		grpc.WithTransportCredentials(
+			insecure.NewCredentials(),
+		),
+	)
+	if err != nil {
+		panic(fmt.Errorf("failed to connect to shop gRPC server: %w", err))
+	}
+
+	cli := rpc.NewShopClient(shopv1.NewShopServiceClient(conn))
+
+	appProductHandler, err := product.NewCreateProductHandler(productRepo, generator, cli)
 	if err != nil {
 		panic(fmt.Errorf("failed to init application product handler: %w", err))
 	}
