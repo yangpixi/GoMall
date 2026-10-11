@@ -25,3 +25,27 @@ func (s *Stock) Snapshot() (*State, error) {
 		LockedQTY:    s.lockedQTY,
 	}, nil
 }
+
+func (s *Stock) SkuID() int64 {
+	return s.skuID
+}
+
+func (s *Stock) Lock(qty int64) error {
+	if qty > s.availableQTY {
+		return ErrStockNotEnough
+	}
+	s.availableQTY -= qty
+	s.lockedQTY += qty
+
+	return nil
+}
+
+func (s *Stock) Release(qty int64) error {
+	if qty > s.lockedQTY {
+		return ErrInsufficientLocked
+	}
+	s.availableQTY += qty
+	s.lockedQTY -= qty
+
+	return nil
+}
