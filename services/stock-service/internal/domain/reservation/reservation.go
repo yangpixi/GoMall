@@ -45,6 +45,14 @@ func (r *StockReservation) Snapshot() (*State, error) {
 	}, nil
 }
 
+func (r *StockReservation) SkuID() int64 {
+	return r.skuID
+}
+
+func (r *StockReservation) Quantity() int64 {
+	return r.quantity
+}
+
 func (r *StockReservation) ToStatusConfirmed() {
 	r.status = StatusConfirmed
 }
