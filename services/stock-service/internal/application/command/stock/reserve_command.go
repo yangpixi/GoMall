@@ -1,4 +1,4 @@
-package command
+package stock
 
 type ReserveCommand struct {
 	Quantity int64

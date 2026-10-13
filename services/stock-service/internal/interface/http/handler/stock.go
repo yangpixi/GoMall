@@ -4,11 +4,13 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yangpixi/GoMall/services/stock-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/stock-service/internal/application/command/stock"
+	"github.com/yangpixi/GoMall/shared/response"
 )
 
 type StockHandler struct {
-	reserveHandler *command.ReserveHandler
+	reserveHandler *stock.ReserveHandler
+	createHandler  *stock.CreateSKUStockHandler
 }
 
 type reserveRequest struct {
@@ -17,12 +19,18 @@ type reserveRequest struct {
 	OrderID  int64 `json:"orderId" binding:"required"`
 }
 
-func NewStockHandler(rh *command.ReserveHandler) (*StockHandler, error) {
-	if rh == nil {
+type createRequest struct {
+	SkuID        int64 `json:"skuId" binding:"required"`
+	AvailableQTY int64 `json:"availableQty" binding:"required"`
+	LockedQTY    int64 `json:"lockedQty" binding:"required"`
+}
+
+func NewStockHandler(rh *stock.ReserveHandler, ch *stock.CreateSKUStockHandler) (*StockHandler, error) {
+	if rh == nil || ch == nil {
 		return nil, errors.New("invalid http stock handler")
 	}
 
-	return &StockHandler{reserveHandler: rh}, nil
+	return &StockHandler{reserveHandler: rh, createHandler: ch}, nil
 }
 
 func (h *StockHandler) ReserveHandler(c *gin.Context) {
@@ -33,7 +41,7 @@ func (h *StockHandler) ReserveHandler(c *gin.Context) {
 		return
 	}
 
-	err := h.reserveHandler.Handle(c.Request.Context(), &command.ReserveCommand{
+	err := h.reserveHandler.Handle(c.Request.Context(), &stock.ReserveCommand{
 		Quantity: req.Quantity,
 		SkuID:    req.SkuID,
 		OrderID:  req.OrderID,
@@ -45,4 +53,28 @@ func (h *StockHandler) ReserveHandler(c *gin.Context) {
 		return
 	}
 
+	response.OK(c, "stock reservation succeeded")
+}
+
+func (h *StockHandler) CreateHandler(c *gin.Context) {
+	var req createRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		_ = c.Error(err)
+		c.Abort()
+		return
+	}
+
+	err := h.createHandler.Handle(c.Request.Context(), &stock.CreateSKUStockCommand{
+		SkuID:        req.SkuID,
+		AvailableQTY: req.AvailableQTY,
+		LockedQTY:    req.LockedQTY,
+	})
+
+	if err != nil {
+		_ = c.Error(err)
+		c.Abort()
+		return
+	}
+
+	response.OK(c, "sku stock creation succeeded")
 }

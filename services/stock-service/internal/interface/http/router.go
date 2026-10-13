@@ -12,6 +12,7 @@ func NewRouter(stockHandler *handler.StockHandler, secretKey []byte) *gin.Engine
 	r.Use(middleware.ErrorHandler())
 
 	shop := r.Group("/api/v1/stock")
+	shop.POST("/create", middleware.RequireJWT(secretKey), stockHandler.CreateHandler)
 	shop.POST("/reserve", middleware.RequireJWT(secretKey), stockHandler.ReserveHandler)
 
 	return r
