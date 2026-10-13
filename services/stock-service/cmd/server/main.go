@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/yangpixi/GoMall/services/stock-service/internal/application/command"
+	"github.com/yangpixi/GoMall/services/stock-service/internal/application/command/stock"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/config"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/infrastructure/persistence/postgres"
@@ -36,8 +36,17 @@ func main() {
 		panic(fmt.Errorf("failed to init snowflake id generator: %w", err))
 	}
 
-	reserveHandler, err := command.NewReserveHandler(stockRepo, reservationRepo, generator)
-	httpStockHandler, err := handler.NewStockHandler(reserveHandler)
+	reserveHandler, err := stock.NewReserveHandler(stockRepo, reservationRepo, generator)
+	if err != nil {
+		panic(fmt.Errorf("failed to init reserve handler"))
+	}
+
+	createHandler, err := stock.NewCreateSKUStockHandler(stockRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init create handler"))
+	}
+
+	httpStockHandler, err := handler.NewStockHandler(reserveHandler, createHandler)
 	if err != nil {
 		panic(fmt.Errorf("failed to init http stock handler: %w", err))
 	}

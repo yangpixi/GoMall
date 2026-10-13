@@ -1,4 +1,4 @@
-package command
+package stock
 
 import (
 	"context"
@@ -19,7 +19,7 @@ type ReserveHandler struct {
 
 func NewReserveHandler(sr stock.Repository, rr reservation.Repository, generator shared.IDGenerator) (*ReserveHandler, error) {
 	if sr == nil || rr == nil || generator == nil {
-		return nil, errors.New("invalid reserve handler ")
+		return nil, errors.New("invalid reserve handler")
 	}
 
 	return &ReserveHandler{
