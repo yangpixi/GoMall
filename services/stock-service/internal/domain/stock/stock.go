@@ -7,7 +7,7 @@ type Stock struct {
 }
 
 func New(skuID, availableQTY, lockedQty int64) (*Stock, error) {
-	if skuID == 0 || availableQTY <= 0 || lockedQty <= 0 {
+	if skuID == 0 || availableQTY < 0 || lockedQty < 0 {
 		return nil, ErrInvalidStock
 	}
 

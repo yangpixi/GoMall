@@ -44,3 +44,24 @@ func (r *StockRepo) Save(ctx context.Context, stock *stock.Stock) error {
 
 	return nil
 }
+
+func (r *StockRepo) Update(ctx context.Context, stock *stock.Stock) error {
+	po, err := mapper.ToStockPO(stock)
+	if err != nil {
+		return fmt.Errorf("failed to transform to po: %w", err)
+	}
+
+	rowsAffected, err := gorm.G[map[string]any](r.db).Table("sku_stock").Where("sku_id = ?", po.SkuID).Updates(ctx, map[string]any{
+		"available_qty": po.AvailableQTY,
+		"locked_qty":    po.LockedQTY,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update sku stock: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("sku stock unupdated")
+	}
+
+	return nil
+}

@@ -45,5 +45,15 @@ func (h *ReserveHandler) Handle(ctx context.Context, cmd *ReserveCommand) error 
 		return err
 	}
 
+	err = h.reservationRepo.Save(ctx, sr)
+	if err != nil {
+		return err
+	}
+
+	err = h.stockRepo.Update(ctx, sku)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

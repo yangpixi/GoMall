@@ -34,5 +34,9 @@ CREATE TABLE IF NOT EXISTS sku
     CONSTRAINT fk_sku_product_id FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE
 );
 
-
+CREATE TRIGGER trigger_set_updated_at
+    BEFORE UPDATE
+    ON sku
+    FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();
 

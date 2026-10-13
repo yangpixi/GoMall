@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS sku_stock
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT ck_available_qty CHECK ( available_qty > 0 ),
-    CONSTRAINT ck_locked_qty CHECK ( locked_qty > 0 )
+    CONSTRAINT ck_locked_qty CHECK ( locked_qty >= 0 )
 );
 
 COMMENT ON COLUMN sku_stock.available_qty IS 'current available stock';
@@ -34,3 +34,9 @@ CREATE TABLE IF NOT EXISTS stock_reservation
     CONSTRAINT ck_status CHECK ( status IN ('reserved', 'confirmed', 'released') ),
     UNIQUE (order_id, sku_id)
 );
+
+CREATE TRIGGER trigger_set_updated_at
+    BEFORE UPDATE
+    ON stock_reservation
+    FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();

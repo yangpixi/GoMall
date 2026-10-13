@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stock.v1;
+
+option go_package = "github.com/yangpixi/GoMall/api/gen/go/stock/v1;stockv1";
+
+message ReserveRequest {
+  int64 quantity = 1;
+  int64 skuID = 2;
+  int64 orderID = 3;
+}
+
+message ReserveResponse {
+
+}
+
+service StockService {
+  rpc Reserve(ReserveRequest) returns (ReserveResponse);
+}
