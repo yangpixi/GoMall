@@ -7,7 +7,7 @@ type State struct {
 }
 
 func Restore(s *State) (*Stock, error) {
-	if s.SkuID == 0 || s.AvailableQTY <= 0 || s.LockedQTY <= 0 {
+	if s.SkuID == 0 || s.AvailableQTY < 0 || s.LockedQTY < 0 {
 		return nil, ErrInvalidStock
 	}
 

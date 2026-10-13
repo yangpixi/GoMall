@@ -9,8 +9,7 @@ import (
 )
 
 type StockHandler struct {
-	reserveHandler *stock.ReserveHandler
-	createHandler  *stock.CreateSKUStockHandler
+	createHandler *stock.CreateSKUStockHandler
 }
 
 type reserveRequest struct {
@@ -25,35 +24,12 @@ type createRequest struct {
 	LockedQTY    int64 `json:"lockedQty" binding:"required"`
 }
 
-func NewStockHandler(rh *stock.ReserveHandler, ch *stock.CreateSKUStockHandler) (*StockHandler, error) {
-	if rh == nil || ch == nil {
+func NewStockHandler(ch *stock.CreateSKUStockHandler) (*StockHandler, error) {
+	if ch == nil {
 		return nil, errors.New("invalid http stock handler")
 	}
 
-	return &StockHandler{reserveHandler: rh, createHandler: ch}, nil
-}
-
-func (h *StockHandler) ReserveHandler(c *gin.Context) {
-	var req reserveRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		_ = c.Error(err)
-		c.Abort()
-		return
-	}
-
-	err := h.reserveHandler.Handle(c.Request.Context(), &stock.ReserveCommand{
-		Quantity: req.Quantity,
-		SkuID:    req.SkuID,
-		OrderID:  req.OrderID,
-	})
-
-	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
-		return
-	}
-
-	response.OK(c, "stock reservation succeeded")
+	return &StockHandler{createHandler: ch}, nil
 }
 
 func (h *StockHandler) CreateHandler(c *gin.Context) {
