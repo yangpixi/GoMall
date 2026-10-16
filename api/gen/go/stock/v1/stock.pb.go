@@ -117,6 +117,86 @@ func (*ReserveResponse) Descriptor() ([]byte, []int) {
 	return file_stock_v1_stock_proto_rawDescGZIP(), []int{1}
 }
 
+type ReleaseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReleaseRequest) Reset() {
+	*x = ReleaseRequest{}
+	mi := &file_stock_v1_stock_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReleaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReleaseRequest) ProtoMessage() {}
+
+func (x *ReleaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_stock_v1_stock_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReleaseRequest.ProtoReflect.Descriptor instead.
+func (*ReleaseRequest) Descriptor() ([]byte, []int) {
+	return file_stock_v1_stock_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ReleaseRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type ReleaseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReleaseResponse) Reset() {
+	*x = ReleaseResponse{}
+	mi := &file_stock_v1_stock_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReleaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReleaseResponse) ProtoMessage() {}
+
+func (x *ReleaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_stock_v1_stock_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReleaseResponse.ProtoReflect.Descriptor instead.
+func (*ReleaseResponse) Descriptor() ([]byte, []int) {
+	return file_stock_v1_stock_proto_rawDescGZIP(), []int{3}
+}
+
 var File_stock_v1_stock_proto protoreflect.FileDescriptor
 
 const file_stock_v1_stock_proto_rawDesc = "" +
@@ -126,9 +206,13 @@ const file_stock_v1_stock_proto_rawDesc = "" +
 	"\bquantity\x18\x01 \x01(\x03R\bquantity\x12\x14\n" +
 	"\x05skuID\x18\x02 \x01(\x03R\x05skuID\x12\x18\n" +
 	"\aorderID\x18\x03 \x01(\x03R\aorderID\"\x11\n" +
-	"\x0fReserveResponse2N\n" +
+	"\x0fReserveResponse\" \n" +
+	"\x0eReleaseRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"\x11\n" +
+	"\x0fReleaseResponse2\x8e\x01\n" +
 	"\fStockService\x12>\n" +
-	"\aReserve\x12\x18.stock.v1.ReserveRequest\x1a\x19.stock.v1.ReserveResponseB8Z6github.com/yangpixi/GoMall/api/gen/go/stock/v1;stockv1b\x06proto3"
+	"\aReserve\x12\x18.stock.v1.ReserveRequest\x1a\x19.stock.v1.ReserveResponse\x12>\n" +
+	"\aRelease\x12\x18.stock.v1.ReleaseRequest\x1a\x19.stock.v1.ReleaseResponseB8Z6github.com/yangpixi/GoMall/api/gen/go/stock/v1;stockv1b\x06proto3"
 
 var (
 	file_stock_v1_stock_proto_rawDescOnce sync.Once
@@ -142,16 +226,20 @@ func file_stock_v1_stock_proto_rawDescGZIP() []byte {
 	return file_stock_v1_stock_proto_rawDescData
 }
 
-var file_stock_v1_stock_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_stock_v1_stock_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_stock_v1_stock_proto_goTypes = []any{
 	(*ReserveRequest)(nil),  // 0: stock.v1.ReserveRequest
 	(*ReserveResponse)(nil), // 1: stock.v1.ReserveResponse
+	(*ReleaseRequest)(nil),  // 2: stock.v1.ReleaseRequest
+	(*ReleaseResponse)(nil), // 3: stock.v1.ReleaseResponse
 }
 var file_stock_v1_stock_proto_depIdxs = []int32{
 	0, // 0: stock.v1.StockService.Reserve:input_type -> stock.v1.ReserveRequest
-	1, // 1: stock.v1.StockService.Reserve:output_type -> stock.v1.ReserveResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: stock.v1.StockService.Release:input_type -> stock.v1.ReleaseRequest
+	1, // 2: stock.v1.StockService.Reserve:output_type -> stock.v1.ReserveResponse
+	3, // 3: stock.v1.StockService.Release:output_type -> stock.v1.ReleaseResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -168,7 +256,7 @@ func file_stock_v1_stock_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_stock_v1_stock_proto_rawDesc), len(file_stock_v1_stock_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

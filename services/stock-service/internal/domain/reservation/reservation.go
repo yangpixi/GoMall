@@ -53,6 +53,10 @@ func (r *StockReservation) Quantity() int64 {
 	return r.quantity
 }
 
+func (r *StockReservation) Status() Status {
+	return r.status
+}
+
 func (r *StockReservation) ToStatusConfirmed() {
 	r.status = StatusConfirmed
 }

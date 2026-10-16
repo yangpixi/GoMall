@@ -71,3 +71,20 @@ func (r *ReservationRepo) Save(ctx context.Context, sr *reservation.StockReserva
 
 	return nil
 }
+
+func (r *ReservationRepo) Update(ctx context.Context, rev *reservation.StockReservation) error {
+	rowsAffected, err := gorm.G[map[string]any](r.db).Table("stock_reservation").Updates(ctx, map[string]any{
+		"quantity": rev.Quantity(),
+		"status":   rev.Status(),
+	})
+
+	if err != nil {
+		return fmt.Errorf("failed to update stock reservation")
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("stock reservation unupdated")
+	}
+
+	return nil
+}

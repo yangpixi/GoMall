@@ -65,7 +65,12 @@ func main() {
 		panic(fmt.Errorf("failed to init reserve handler"))
 	}
 
-	stockServer := grpciface.NewStockServer(reserveHandler)
+	releaseHandler, err := stock.NewReleaseHandler(reservationRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init release handler"))
+	}
+
+	stockServer := grpciface.NewStockServer(reserveHandler, releaseHandler)
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", c.Server.GRPCPort))
 	if err != nil {
 		panic(fmt.Errorf("failed to listen port: %d, error: %w", c.Server.GRPCPort, err))

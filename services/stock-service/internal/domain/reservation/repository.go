@@ -9,4 +9,5 @@ type Repository interface {
 	FindByOrderID(ctx context.Context, orderID int64) (*StockReservation, error)
 	FindBySkuID(ctx context.Context, skuID int64) (*StockReservation, error)
 	Save(ctx context.Context, sr *StockReservation) error
+	Update(ctx context.Context, rev *StockReservation) error
 }

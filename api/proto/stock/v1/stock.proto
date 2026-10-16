@@ -10,10 +10,16 @@ message ReserveRequest {
   int64 orderID = 3;
 }
 
-message ReserveResponse {
+message ReserveResponse {}
 
+
+message ReleaseRequest {
+  int64 id = 1;
 }
+
+message ReleaseResponse {}
 
 service StockService {
   rpc Reserve(ReserveRequest) returns (ReserveResponse);
+  rpc Release(ReleaseRequest) returns (ReleaseResponse);
 }
