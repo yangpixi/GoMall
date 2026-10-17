@@ -10,15 +10,16 @@ import (
 type StockServer struct {
 	stockv1.UnimplementedStockServiceServer
 
-	handler *stock.ReserveHandler
+	reserveHandler *stock.ReserveHandler
+	releaseHandler *stock.ReleaseHandler
 }
 
-func NewStockServer(h *stock.ReserveHandler) *StockServer {
-	return &StockServer{handler: h}
+func NewStockServer(reserveHandler *stock.ReserveHandler, releaseHandler *stock.ReleaseHandler) *StockServer {
+	return &StockServer{reserveHandler: reserveHandler, releaseHandler: releaseHandler}
 }
 
 func (s *StockServer) Reserve(ctx context.Context, in *stockv1.ReserveRequest) (*stockv1.ReserveResponse, error) {
-	err := s.handler.Handle(ctx, &stock.ReserveCommand{
+	err := s.reserveHandler.Handle(ctx, &stock.ReserveCommand{
 		Quantity: in.Quantity,
 		SkuID:    in.SkuID,
 		OrderID:  in.OrderID,
@@ -28,4 +29,13 @@ func (s *StockServer) Reserve(ctx context.Context, in *stockv1.ReserveRequest) (
 	}
 
 	return &stockv1.ReserveResponse{}, nil
+}
+
+func (s *StockServer) Release(ctx context.Context, in *stockv1.ReleaseRequest) (*stockv1.ReleaseResponse, error) {
+	err := s.releaseHandler.Handle(ctx, &stock.ReleaseCommand{ID: in.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	return &stockv1.ReleaseResponse{}, nil
 }
