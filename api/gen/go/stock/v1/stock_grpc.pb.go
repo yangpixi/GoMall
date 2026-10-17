@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	StockService_Reserve_FullMethodName = "/stock.v1.StockService/Reserve"
 	StockService_Release_FullMethodName = "/stock.v1.StockService/Release"
+	StockService_Confirm_FullMethodName = "/stock.v1.StockService/Confirm"
 )
 
 // StockServiceClient is the client API for StockService service.
@@ -29,6 +30,7 @@ const (
 type StockServiceClient interface {
 	Reserve(ctx context.Context, in *ReserveRequest, opts ...grpc.CallOption) (*ReserveResponse, error)
 	Release(ctx context.Context, in *ReleaseRequest, opts ...grpc.CallOption) (*ReleaseResponse, error)
+	Confirm(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*ConfirmResponse, error)
 }
 
 type stockServiceClient struct {
@@ -59,12 +61,23 @@ func (c *stockServiceClient) Release(ctx context.Context, in *ReleaseRequest, op
 	return out, nil
 }
 
+func (c *stockServiceClient) Confirm(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*ConfirmResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ConfirmResponse)
+	err := c.cc.Invoke(ctx, StockService_Confirm_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StockServiceServer is the server API for StockService service.
 // All implementations must embed UnimplementedStockServiceServer
 // for forward compatibility.
 type StockServiceServer interface {
 	Reserve(context.Context, *ReserveRequest) (*ReserveResponse, error)
 	Release(context.Context, *ReleaseRequest) (*ReleaseResponse, error)
+	Confirm(context.Context, *ConfirmRequest) (*ConfirmResponse, error)
 	mustEmbedUnimplementedStockServiceServer()
 }
 
@@ -80,6 +93,9 @@ func (UnimplementedStockServiceServer) Reserve(context.Context, *ReserveRequest)
 }
 func (UnimplementedStockServiceServer) Release(context.Context, *ReleaseRequest) (*ReleaseResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Release not implemented")
+}
+func (UnimplementedStockServiceServer) Confirm(context.Context, *ConfirmRequest) (*ConfirmResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Confirm not implemented")
 }
 func (UnimplementedStockServiceServer) mustEmbedUnimplementedStockServiceServer() {}
 func (UnimplementedStockServiceServer) testEmbeddedByValue()                      {}
@@ -138,6 +154,24 @@ func _StockService_Release_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StockService_Confirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StockServiceServer).Confirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StockService_Confirm_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StockServiceServer).Confirm(ctx, req.(*ConfirmRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StockService_ServiceDesc is the grpc.ServiceDesc for StockService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +186,10 @@ var StockService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Release",
 			Handler:    _StockService_Release_Handler,
+		},
+		{
+			MethodName: "Confirm",
+			Handler:    _StockService_Confirm_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

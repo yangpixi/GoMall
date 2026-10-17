@@ -19,7 +19,14 @@ message ReleaseRequest {
 
 message ReleaseResponse {}
 
+message ConfirmRequest {
+  int64 id = 1;
+}
+
+message ConfirmResponse {}
+
 service StockService {
   rpc Reserve(ReserveRequest) returns (ReserveResponse);
   rpc Release(ReleaseRequest) returns (ReleaseResponse);
+  rpc Confirm(ConfirmRequest) returns (ConfirmResponse);
 }

@@ -12,10 +12,11 @@ type StockServer struct {
 
 	reserveHandler *stock.ReserveHandler
 	releaseHandler *stock.ReleaseHandler
+	confirmHandler *stock.ConfirmHandler
 }
 
-func NewStockServer(reserveHandler *stock.ReserveHandler, releaseHandler *stock.ReleaseHandler) *StockServer {
-	return &StockServer{reserveHandler: reserveHandler, releaseHandler: releaseHandler}
+func NewStockServer(reserveHandler *stock.ReserveHandler, releaseHandler *stock.ReleaseHandler, confirmHandler *stock.ConfirmHandler) *StockServer {
+	return &StockServer{reserveHandler: reserveHandler, releaseHandler: releaseHandler, confirmHandler: confirmHandler}
 }
 
 func (s *StockServer) Reserve(ctx context.Context, in *stockv1.ReserveRequest) (*stockv1.ReserveResponse, error) {
@@ -38,4 +39,13 @@ func (s *StockServer) Release(ctx context.Context, in *stockv1.ReleaseRequest) (
 	}
 
 	return &stockv1.ReleaseResponse{}, nil
+}
+
+func (s *StockServer) Confirm(ctx context.Context, in *stockv1.ConfirmRequest) (*stockv1.ConfirmResponse, error) {
+	err := s.confirmHandler.Handle(ctx, &stock.ConfirmCommand{ID: in.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	return &stockv1.ConfirmResponse{}, nil
 }

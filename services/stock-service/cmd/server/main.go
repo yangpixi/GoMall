@@ -70,7 +70,12 @@ func main() {
 		panic(fmt.Errorf("failed to init release handler"))
 	}
 
-	stockServer := grpciface.NewStockServer(reserveHandler, releaseHandler)
+	confirmHandler, err := stock.NewConfirmHandler(reservationRepo)
+	if err != nil {
+		panic(fmt.Errorf("failed to init confirm handler"))
+	}
+
+	stockServer := grpciface.NewStockServer(reserveHandler, releaseHandler, confirmHandler)
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", c.Server.GRPCPort))
 	if err != nil {
 		panic(fmt.Errorf("failed to listen port: %d, error: %w", c.Server.GRPCPort, err))
