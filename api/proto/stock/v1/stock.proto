@@ -4,6 +4,7 @@ package stock.v1;
 
 option go_package = "github.com/yangpixi/GoMall/api/gen/go/stock/v1;stockv1";
 
+// reserve
 message ReserveRequest {
   int64 quantity = 1;
   int64 skuID = 2;
@@ -12,21 +13,34 @@ message ReserveRequest {
 
 message ReserveResponse {}
 
-
+// release
 message ReleaseRequest {
   int64 id = 1;
 }
 
 message ReleaseResponse {}
 
+// confirm
 message ConfirmRequest {
   int64 id = 1;
 }
 
 message ConfirmResponse {}
 
+// get available quantity
+message GetStockRequest {
+  int64 skuId = 1;
+}
+
+message GetStockResponse {
+  int64 skuID = 1;
+  int64 availableQty = 2;
+}
+
+// services
 service StockService {
   rpc Reserve(ReserveRequest) returns (ReserveResponse);
   rpc Release(ReleaseRequest) returns (ReleaseResponse);
   rpc Confirm(ConfirmRequest) returns (ConfirmResponse);
+  rpc GetStock(GetStockRequest) returns (GetStockResponse);
 }

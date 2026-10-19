@@ -6,10 +6,12 @@ import (
 	"net"
 
 	stockv1 "github.com/yangpixi/GoMall/api/gen/go/stock/v1"
-	"github.com/yangpixi/GoMall/services/stock-service/internal/application/command/stock"
+	stockcommand "github.com/yangpixi/GoMall/services/stock-service/internal/application/command/stock"
+	stockquery "github.com/yangpixi/GoMall/services/stock-service/internal/application/query/stock"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/config"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/infrastructure/persistence/postgres"
+	"github.com/yangpixi/GoMall/services/stock-service/internal/infrastructure/persistence/postgres/reader"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/infrastructure/persistence/postgres/repository"
 	grpciface "github.com/yangpixi/GoMall/services/stock-service/internal/interface/grpc"
 	"github.com/yangpixi/GoMall/services/stock-service/internal/interface/http"
@@ -40,7 +42,7 @@ func main() {
 		panic(fmt.Errorf("failed to init snowflake id generator: %w", err))
 	}
 
-	createHandler, err := stock.NewCreateSKUStockHandler(stockRepo)
+	createHandler, err := stockcommand.NewCreateSKUStockHandler(stockRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init create handler"))
 	}
@@ -60,22 +62,28 @@ func main() {
 	}()
 
 	// gRPC initialization
-	reserveHandler, err := stock.NewReserveHandler(stockRepo, reservationRepo, generator)
+	reserveHandler, err := stockcommand.NewReserveHandler(stockRepo, reservationRepo, generator)
 	if err != nil {
 		panic(fmt.Errorf("failed to init reserve handler"))
 	}
 
-	releaseHandler, err := stock.NewReleaseHandler(reservationRepo)
+	releaseHandler, err := stockcommand.NewReleaseHandler(reservationRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init release handler"))
 	}
 
-	confirmHandler, err := stock.NewConfirmHandler(reservationRepo)
+	confirmHandler, err := stockcommand.NewConfirmHandler(reservationRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init confirm handler"))
 	}
 
-	stockServer := grpciface.NewStockServer(reserveHandler, releaseHandler, confirmHandler)
+	stockReader := reader.NewStockReader(db)
+	getStockHandler, err := stockquery.NewGetStockHandler(stockReader)
+	if err != nil {
+		panic(fmt.Errorf("failed to init get stock handler"))
+	}
+
+	stockServer := grpciface.NewStockServer(reserveHandler, releaseHandler, confirmHandler, getStockHandler)
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", c.Server.GRPCPort))
 	if err != nil {
 		panic(fmt.Errorf("failed to listen port: %d, error: %w", c.Server.GRPCPort, err))
