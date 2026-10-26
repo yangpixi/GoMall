@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS gomall_order
 
     total_amount BIGINT NOT NULL,
     discount_amount BIGINT NOT NULL,
-    final_amound BIGINT NOT NULL,
+    final_amount BIGINT NOT NULL,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
