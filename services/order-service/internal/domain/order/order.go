@@ -50,6 +50,19 @@ func NewOrder(
 
 }
 
+func (o *Order) Snapshot() *State {
+	return &State{
+		ID:             o.id,
+		UserID:         o.userID,
+		Status:         o.status,
+		TotalAmount:    o.totalAmount,
+		DiscountAmount: o.discountAmount,
+		FinalAmount:    o.finalAmount,
+		Items:          o.items,
+		Address:        o.address,
+	}
+}
+
 func (o *Order) ToStatusPaid() {
 	o.status = StatusPaid
 }
@@ -60,4 +73,16 @@ func (o *Order) ToStatusCancelled() {
 
 func (o *Order) ToStatusPendingPayment() {
 	o.status = StatusPendingPayment
+}
+
+func (o *Order) Items() []*Item {
+	return o.items
+}
+
+func (o *Order) Address() *Address {
+	return o.address
+}
+
+func (o *Order) ID() int64 {
+	return o.id
 }
