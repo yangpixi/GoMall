@@ -3,15 +3,20 @@ package main
 import (
 	"fmt"
 	"log/slog"
+	"net"
 
+	productv1 "github.com/yangpixi/GoMall/api/gen/go/product/v1"
 	shopv1 "github.com/yangpixi/GoMall/api/gen/go/shop/v1"
-	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
-	"github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
+	productcommand "github.com/yangpixi/GoMall/services/product-service/internal/application/command/product"
+	skucommand "github.com/yangpixi/GoMall/services/product-service/internal/application/command/sku"
+	skuquery "github.com/yangpixi/GoMall/services/product-service/internal/application/query/sku"
 	"github.com/yangpixi/GoMall/services/product-service/internal/config"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/id"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/persistence/postgres/repository"
+	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/reader"
 	"github.com/yangpixi/GoMall/services/product-service/internal/infrastructure/rpc"
+	grpciface "github.com/yangpixi/GoMall/services/product-service/internal/interface/grpc"
 	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http"
 	"github.com/yangpixi/GoMall/services/product-service/internal/interface/http/handler"
 	"github.com/yangpixi/GoMall/shared/logger"
@@ -52,12 +57,12 @@ func main() {
 
 	cli := rpc.NewShopClient(shopv1.NewShopServiceClient(conn))
 
-	appProductHandler, err := product.NewCreateProductHandler(productRepo, generator, cli)
+	appProductHandler, err := productcommand.NewCreateProductHandler(productRepo, generator, cli)
 	if err != nil {
 		panic(fmt.Errorf("failed to init application product handler: %w", err))
 	}
 
-	appSKUHandler, err := sku.NewCreateSKUHandler(skuRepo)
+	appSKUHandler, err := skucommand.NewCreateSKUHandler(skuRepo)
 	if err != nil {
 		panic(fmt.Errorf("failed to init application sku handler: %w", err))
 	}
@@ -69,10 +74,29 @@ func main() {
 
 	router := http.NewRouter(httpHandler, []byte(c.JWT.SecretKey))
 
-	slog.Info("starting server", "port", c.Server.Port)
+	go func() {
+		slog.Info("starting http server", "port", c.Server.Port)
+		if err = router.Run(fmt.Sprintf(":%d", c.Server.Port)); err != nil {
+			panic(fmt.Errorf("failed to run http server: %w", err))
+		}
+	}()
 
-	if err = router.Run(fmt.Sprintf(":%d", c.Server.Port)); err != nil {
-		panic(fmt.Errorf("failed to run http server: %w", err))
+	// grpc initialization
+
+	skuReader := reader.NewSKUReader(db)
+	querySKUHandler := skuquery.NewGetSKUPriceHandler(skuReader)
+	productServer := grpciface.NewProductServer(querySKUHandler)
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", c.Server.GRPCPort))
+	if err != nil {
+		panic(fmt.Errorf("failed to listen port: %d, error: %w", c.Server.GRPCPort, err))
 	}
 
+	srv := grpc.NewServer()
+	productv1.RegisterSKUServiceServer(srv, productServer)
+
+	slog.Info("starting gRPC server", "port", c.Server.GRPCPort)
+	if err = srv.Serve(lis); err != nil {
+		panic(fmt.Errorf("failed to start gRPC server"))
+	}
 }

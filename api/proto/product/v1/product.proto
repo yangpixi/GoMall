@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package product.v1;
+
+option go_package = "github.com/yangpixi/GoMall/api/gen/go/product/v1;productv1";
+
+message GetSKUPriceRequest {
+  int64 id = 1;
+}
+
+message GetSKUPriceResponse {
+  int64 price = 1;
+}
+
+service SKUService {
+  rpc GetSKUPrice(GetSKUPriceRequest) returns (GetSKUPriceResponse);
+}
+
