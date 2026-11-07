@@ -23,7 +23,7 @@ type createProductRequest struct {
 
 type createSKURequest struct {
 	ProductID     int64  `json:"productId,string"`
-	Price         int    `json:"price"`
+	Price         int64  `json:"price"`
 	Specification string `json:"specification"`
 }
 

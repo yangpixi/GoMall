@@ -5,7 +5,7 @@ import "strings"
 type State struct {
 	ID            int64
 	ProductID     int64
-	Price         int
+	Price         int64
 	Specification string
 }
 
