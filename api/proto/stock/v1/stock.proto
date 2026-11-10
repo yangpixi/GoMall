@@ -7,8 +7,8 @@ option go_package = "github.com/yangpixi/GoMall/api/gen/go/stock/v1;stockv1";
 // reserve
 message ReserveRequest {
   int64 quantity = 1;
-  int64 skuID = 2;
-  int64 orderID = 3;
+  int64 sku_id = 2;
+  int64 order_id = 3;
 }
 
 message ReserveResponse {}
@@ -29,12 +29,12 @@ message ConfirmResponse {}
 
 // get available quantity
 message GetStockRequest {
-  int64 skuId = 1;
+  int64 sku_id = 1;
 }
 
 message GetStockResponse {
-  int64 skuID = 1;
-  int64 availableQty = 2;
+  int64 sku_id = 1;
+  int64 available_qty = 2;
 }
 
 // services

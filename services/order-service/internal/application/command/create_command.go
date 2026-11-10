@@ -2,7 +2,7 @@ package command
 
 type CreateOrderCommand struct {
 	Items   []*ItemCommand
-	Address AddressCommand
+	Address *AddressCommand
 }
 
 type ItemCommand struct {
