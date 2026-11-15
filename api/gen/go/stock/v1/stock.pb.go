@@ -25,8 +25,8 @@ const (
 type ReserveRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Quantity      int64                  `protobuf:"varint,1,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	SkuID         int64                  `protobuf:"varint,2,opt,name=skuID,proto3" json:"skuID,omitempty"`
-	OrderID       int64                  `protobuf:"varint,3,opt,name=orderID,proto3" json:"orderID,omitempty"`
+	SkuId         int64                  `protobuf:"varint,2,opt,name=sku_id,json=skuId,proto3" json:"sku_id,omitempty"`
+	OrderId       int64                  `protobuf:"varint,3,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -68,16 +68,16 @@ func (x *ReserveRequest) GetQuantity() int64 {
 	return 0
 }
 
-func (x *ReserveRequest) GetSkuID() int64 {
+func (x *ReserveRequest) GetSkuId() int64 {
 	if x != nil {
-		return x.SkuID
+		return x.SkuId
 	}
 	return 0
 }
 
-func (x *ReserveRequest) GetOrderID() int64 {
+func (x *ReserveRequest) GetOrderId() int64 {
 	if x != nil {
-		return x.OrderID
+		return x.OrderId
 	}
 	return 0
 }
@@ -283,7 +283,7 @@ func (*ConfirmResponse) Descriptor() ([]byte, []int) {
 // get available quantity
 type GetStockRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SkuId         int64                  `protobuf:"varint,1,opt,name=skuId,proto3" json:"skuId,omitempty"`
+	SkuId         int64                  `protobuf:"varint,1,opt,name=sku_id,json=skuId,proto3" json:"sku_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -327,8 +327,8 @@ func (x *GetStockRequest) GetSkuId() int64 {
 
 type GetStockResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SkuID         int64                  `protobuf:"varint,1,opt,name=skuID,proto3" json:"skuID,omitempty"`
-	AvailableQty  int64                  `protobuf:"varint,2,opt,name=availableQty,proto3" json:"availableQty,omitempty"`
+	SkuId         int64                  `protobuf:"varint,1,opt,name=sku_id,json=skuId,proto3" json:"sku_id,omitempty"`
+	AvailableQty  int64                  `protobuf:"varint,2,opt,name=available_qty,json=availableQty,proto3" json:"available_qty,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -363,9 +363,9 @@ func (*GetStockResponse) Descriptor() ([]byte, []int) {
 	return file_stock_v1_stock_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *GetStockResponse) GetSkuID() int64 {
+func (x *GetStockResponse) GetSkuId() int64 {
 	if x != nil {
-		return x.SkuID
+		return x.SkuId
 	}
 	return 0
 }
@@ -381,23 +381,23 @@ var File_stock_v1_stock_proto protoreflect.FileDescriptor
 
 const file_stock_v1_stock_proto_rawDesc = "" +
 	"\n" +
-	"\x14stock/v1/stock.proto\x12\bstock.v1\"\\\n" +
+	"\x14stock/v1/stock.proto\x12\bstock.v1\"^\n" +
 	"\x0eReserveRequest\x12\x1a\n" +
-	"\bquantity\x18\x01 \x01(\x03R\bquantity\x12\x14\n" +
-	"\x05skuID\x18\x02 \x01(\x03R\x05skuID\x12\x18\n" +
-	"\aorderID\x18\x03 \x01(\x03R\aorderID\"\x11\n" +
+	"\bquantity\x18\x01 \x01(\x03R\bquantity\x12\x15\n" +
+	"\x06sku_id\x18\x02 \x01(\x03R\x05skuId\x12\x19\n" +
+	"\border_id\x18\x03 \x01(\x03R\aorderId\"\x11\n" +
 	"\x0fReserveResponse\" \n" +
 	"\x0eReleaseRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"\x11\n" +
 	"\x0fReleaseResponse\" \n" +
 	"\x0eConfirmRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"\x11\n" +
-	"\x0fConfirmResponse\"'\n" +
-	"\x0fGetStockRequest\x12\x14\n" +
-	"\x05skuId\x18\x01 \x01(\x03R\x05skuId\"L\n" +
-	"\x10GetStockResponse\x12\x14\n" +
-	"\x05skuID\x18\x01 \x01(\x03R\x05skuID\x12\"\n" +
-	"\favailableQty\x18\x02 \x01(\x03R\favailableQty2\x91\x02\n" +
+	"\x0fConfirmResponse\"(\n" +
+	"\x0fGetStockRequest\x12\x15\n" +
+	"\x06sku_id\x18\x01 \x01(\x03R\x05skuId\"N\n" +
+	"\x10GetStockResponse\x12\x15\n" +
+	"\x06sku_id\x18\x01 \x01(\x03R\x05skuId\x12#\n" +
+	"\ravailable_qty\x18\x02 \x01(\x03R\favailableQty2\x91\x02\n" +
 	"\fStockService\x12>\n" +
 	"\aReserve\x12\x18.stock.v1.ReserveRequest\x1a\x19.stock.v1.ReserveResponse\x12>\n" +
 	"\aRelease\x12\x18.stock.v1.ReleaseRequest\x1a\x19.stock.v1.ReleaseResponse\x12>\n" +

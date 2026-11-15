@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package order.v1;
+
+option go_package = "github.com/yangpixi/GoMall/api/gen/go/order/v1;orderv1";
+
+message Item {
+  int64 sku_id = 1;
+  int64 quantity = 2;
+}
+
+message Address {
+  string address = 1;
+  string recipient = 2;
+  string phone = 3;
+}
+
+message CreateOrderRequest {
+  repeated Item items = 1;
+  Address address = 2;
+}
+
+message CreateOrderResponse {
+  string msg = 1;
+}
+
+service OrderService {
+  rpc Create(CreateOrderRequest) returns (CreateOrderResponse);
+}
+

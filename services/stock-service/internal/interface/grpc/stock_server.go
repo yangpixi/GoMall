@@ -34,8 +34,8 @@ func NewStockServer(
 func (s *StockServer) Reserve(ctx context.Context, in *stockv1.ReserveRequest) (*stockv1.ReserveResponse, error) {
 	err := s.reserveHandler.Handle(ctx, &stockcommand.ReserveCommand{
 		Quantity: in.Quantity,
-		SkuID:    in.SkuID,
-		OrderID:  in.OrderID,
+		SkuID:    in.SkuId,
+		OrderID:  in.OrderId,
 	})
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (s *StockServer) GetStock(ctx context.Context, in *stockv1.GetStockRequest)
 	}
 
 	return &stockv1.GetStockResponse{
-		SkuID:        vo.SkuID,
+		SkuId:        vo.SkuID,
 		AvailableQty: vo.AvailableQTY,
 	}, nil
 }
