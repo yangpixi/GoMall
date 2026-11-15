@@ -46,7 +46,7 @@ func main() {
 		panic(fmt.Errorf("failed to init id generator"))
 	}
 
-	conn, err := grpc.NewClient("localhost:9094",
+	conn, err := grpc.NewClient("localhost:9094", // 9094 is shop gRPC server port
 		grpc.WithTransportCredentials(
 			insecure.NewCredentials(),
 		),
