@@ -1,0 +1,13 @@
+server:
+  port: 8087
+  grpc-port: 9097
+database:
+  connection:
+    port:
+    host:
+  user:
+  password:
+  db: payment_db
+
+jwt:
+  secret-key:
