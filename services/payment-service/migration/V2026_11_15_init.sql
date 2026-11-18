@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS payment
     channel        VARCHAR(10)  NOT NULL,
     status         VARCHAR(10)  NOT NULL DEFAULT 'pending' CHECK ( status IN ('pending', 'paid', 'cancelled') ),
 
-    transaction_id VARCHAR(128) NOT NULL,
+    transaction_id VARCHAR(128),
 
     expires_at     TIMESTAMPTZ  NOT NULL,
     paid_at        TIMESTAMPTZ,

@@ -19,3 +19,20 @@ func ToPayment(m *model.Payment) (*payment.Payment, error) {
 		CancelledAt:   m.CancelledAt,
 	})
 }
+
+func ToPaymentPO(p *payment.Payment) *model.Payment {
+	s := p.Snapshot()
+	return &model.Payment{
+		ID:            s.ID,
+		UserID:        s.UserID,
+		OrderID:       s.OrderID,
+		Amount:        s.Amount,
+		Currency:      s.Currency,
+		Channel:       s.Channel,
+		Status:        s.Status,
+		TransactionID: s.TransactionID,
+		ExpiresAt:     s.ExpiresAt,
+		PaidAt:        s.PaidAt,
+		CancelledAt:   s.CancelledAt,
+	}
+}

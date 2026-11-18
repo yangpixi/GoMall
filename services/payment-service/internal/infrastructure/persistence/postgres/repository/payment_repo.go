@@ -35,3 +35,13 @@ func (r *PaymentRepo) FindByID(ctx context.Context, id int64) (*payment.Payment,
 
 	return p, nil
 }
+
+func (r *PaymentRepo) Save(ctx context.Context, p *payment.Payment) error {
+	po := mapper.ToPaymentPO(p)
+	err := gorm.G[model.Payment](r.db).Create(ctx, po)
+	if err != nil {
+		return fmt.Errorf("failed to save payment po")
+	}
+
+	return nil
+}

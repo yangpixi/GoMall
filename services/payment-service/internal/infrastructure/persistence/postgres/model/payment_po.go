@@ -14,11 +14,11 @@ type Payment struct {
 	Currency      string
 	Channel       string
 	Status        payment.Status
-	TransactionID string
+	TransactionID *string
 
 	ExpiresAt   time.Time
 	PaidAt      *time.Time // nullable
-	CancelledAt *time.Time // nullalbe
+	CancelledAt *time.Time // nullable
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
