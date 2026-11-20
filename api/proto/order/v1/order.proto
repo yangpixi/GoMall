@@ -4,6 +4,7 @@ package order.v1;
 
 option go_package = "github.com/yangpixi/GoMall/api/gen/go/order/v1;orderv1";
 
+// create
 message Item {
   int64 sku_id = 1;
   int64 quantity = 2;
@@ -24,7 +25,22 @@ message CreateOrderResponse {
   string msg = 1;
 }
 
+// query
+message OrderQueryRequest {
+  int64 id = 1;
+}
+
+message OrderQueryResponse {
+  int64 id = 1;
+  int64 user_id = 2;
+  string status = 3;
+  int64 total_amount = 4;
+  int64 discount_amount = 5;
+  int64 final_amount = 6;
+}
+
 service OrderService {
   rpc Create(CreateOrderRequest) returns (CreateOrderResponse);
+  rpc Query(OrderQueryRequest) returns (OrderQueryResponse);
 }
 

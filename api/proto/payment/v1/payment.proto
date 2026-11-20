@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package payment.v1;
+
+option go_package = "github.com/yangpixi/GoMall/api/gen/go/payment/v1;paymentv1";
+
+message CreatePaymentRequest {
+  int64 order_id = 1;
+  int64 amount = 2;
+  string currency = 3;
+  string channel = 4;
+}
+
+message CreatePaymentResponse {
+  string msg = 1;
+}
+
+service PaymentService {
+  rpc Create(CreatePaymentRequest) returns (CreatePaymentResponse);
+}

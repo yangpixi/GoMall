@@ -49,7 +49,7 @@ func Load(path string) (*Config, error) {
 
 	// setting default value for service
 	c := &Config{
-		Server: Server{Port: 8085},
+		Server: Server{Port: 8086},
 		Database: Database{
 			Connection: Connection{
 				Port: 5432,
