@@ -71,3 +71,7 @@ func (p *Payment) ToStatusCancelled(t time.Time) {
 	p.status = StatusCancelled
 	p.cancelledAt = &t
 }
+
+func (p *Payment) AppendTxID(txID string) {
+	p.transactionID = &txID
+}
