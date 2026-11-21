@@ -62,16 +62,13 @@ func (p *Payment) Snapshot() *State {
 	}
 }
 
-func (p *Payment) ToStatusPaid(t time.Time) {
+func (p *Payment) ToStatusPaid(t time.Time, txID string) {
 	p.status = StatusPaid
 	p.paidAt = &t
+	p.transactionID = &txID
 }
 
 func (p *Payment) ToStatusCancelled(t time.Time) {
 	p.status = StatusCancelled
 	p.cancelledAt = &t
-}
-
-func (p *Payment) AppendTxID(txID string) {
-	p.transactionID = &txID
 }
