@@ -13,6 +13,7 @@ type Config struct {
 	Server   Server
 	Database Database
 	JWT      JWT
+	Payment  Payment
 }
 
 type Server struct {
@@ -34,6 +35,9 @@ type Connection struct {
 
 type JWT struct {
 	SecretKey string `yaml:"secret-key" validate:"required"`
+}
+
+type Payment struct {
 }
 
 // Load the very config

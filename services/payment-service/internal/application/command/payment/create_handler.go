@@ -6,24 +6,26 @@ import (
 	"strconv"
 
 	"github.com/yangpixi/GoMall/services/payment-service/internal/application/port"
-	"github.com/yangpixi/GoMall/services/payment-service/internal/domain/payment"
+	"github.com/yangpixi/GoMall/services/payment-service/internal/application/port/gateway"
+	paymentdomain "github.com/yangpixi/GoMall/services/payment-service/internal/domain/payment"
+	paymentinfra "github.com/yangpixi/GoMall/services/payment-service/internal/infrastructure/payment"
 	"github.com/yangpixi/GoMall/shared/http/id"
 )
 
 type CreatePaymentHandler struct {
-	repo        payment.Repository
-	generator   payment.IDGenerator
-	gateway     port.PaymentGateway
+	repo        paymentdomain.Repository
+	generator   paymentdomain.IDGenerator
+	registry    *paymentinfra.Registry
 	orderReader port.OrderReader
 }
 
 func NewCreatePaymentHandler(
-	r payment.Repository,
-	generator payment.IDGenerator,
-	gateway port.PaymentGateway,
+	r paymentdomain.Repository,
+	generator paymentdomain.IDGenerator,
+	registry *paymentinfra.Registry,
 	reader port.OrderReader,
 ) *CreatePaymentHandler {
-	return &CreatePaymentHandler{repo: r, generator: generator, gateway: gateway, orderReader: reader}
+	return &CreatePaymentHandler{repo: r, generator: generator, orderReader: reader, registry: registry}
 }
 
 func (h *CreatePaymentHandler) Handle(ctx context.Context, cmd *CreatePaymentCommand) error {
@@ -33,7 +35,7 @@ func (h *CreatePaymentHandler) Handle(ctx context.Context, cmd *CreatePaymentCom
 	}
 
 	if o.Status != "PendingPayment" {
-		return payment.ErrCannotPay
+		return paymentdomain.ErrCannotPay
 	}
 
 	pID := h.generator.NextID()
@@ -43,7 +45,7 @@ func (h *CreatePaymentHandler) Handle(ctx context.Context, cmd *CreatePaymentCom
 		return fmt.Errorf("failed to retrieve userID from context")
 	}
 
-	p, err := payment.New(pID, userID, cmd.OrderID, cmd.Amount, cmd.Currency, cmd.Channel)
+	p, err := paymentdomain.New(pID, userID, cmd.OrderID, cmd.Amount, cmd.Currency, cmd.Channel)
 	if err != nil {
 		return err
 	}
@@ -55,7 +57,12 @@ func (h *CreatePaymentHandler) Handle(ctx context.Context, cmd *CreatePaymentCom
 	}
 
 	// invoke payment gateway
-	_, err = h.gateway.Prepay(ctx, &port.PrepayRequest{
+	g, err := h.registry.Get(cmd.Channel)
+	if err != nil {
+		return err
+	}
+
+	_, err = g.Prepay(ctx, &gateway.PrepayRequest{
 		OutTradeNo:  strconv.FormatInt(pID, 10),
 		Description: fmt.Sprintf("GoMall: %d", pID),
 		Amount:      o.FinalAmount,

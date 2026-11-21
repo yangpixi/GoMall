@@ -1,4 +1,4 @@
-package port
+package gateway
 
 import "context"
 
@@ -13,9 +13,11 @@ type PrepayResponse struct {
 }
 
 type QueryRequest struct {
+	// TODO
 }
 
 type QueryResponse struct {
+	// TODO
 }
 
 type PaymentGateway interface {

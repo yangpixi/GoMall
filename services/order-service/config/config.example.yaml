@@ -1,6 +1,6 @@
 server:
   port: 8086
-
+  grpc-port: 9096
 database:
   connection:
     port: 5432

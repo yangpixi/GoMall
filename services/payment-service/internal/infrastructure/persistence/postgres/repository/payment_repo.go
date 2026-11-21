@@ -15,7 +15,7 @@ type PaymentRepo struct {
 	db *gorm.DB
 }
 
-func NewPaymentRepo(db *gorm.DB) *PaymentRepo {
+func NewPaymentRepo(db *gorm.DB) payment.Repository {
 	return &PaymentRepo{db: db}
 }
 
@@ -41,6 +41,25 @@ func (r *PaymentRepo) Save(ctx context.Context, p *payment.Payment) error {
 	err := gorm.G[model.Payment](r.db).Create(ctx, po)
 	if err != nil {
 		return fmt.Errorf("failed to save payment po")
+	}
+
+	return nil
+}
+
+func (r *PaymentRepo) Update(ctx context.Context, p *payment.Payment) error {
+	po := mapper.ToPaymentPO(p)
+	rowsAffected, err := gorm.G[map[string]any](r.db).Updates(ctx, map[string]any{
+		"status":         po.Status,
+		"transaction_id": po.TransactionID,
+		"paidAt":         po.PaidAt,
+		"cancelledAt":    po.CancelledAt,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update payment: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("payment record unupdated")
 	}
 
 	return nil

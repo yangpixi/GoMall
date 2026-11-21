@@ -13,10 +13,10 @@ import (
 type PaymentServer struct {
 	paymentv1.UnimplementedPaymentServiceServer
 
-	createHandler commandpayment.CreatePaymentHandler
+	createHandler *commandpayment.CreatePaymentHandler
 }
 
-func NewPaymentServer(ch commandpayment.CreatePaymentHandler) *PaymentServer {
+func NewPaymentServer(ch *commandpayment.CreatePaymentHandler) *PaymentServer {
 	return &PaymentServer{createHandler: ch}
 }
 
